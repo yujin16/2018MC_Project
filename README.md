@@ -8,10 +8,13 @@
 > github
 
 ## IDE
-> Unity, VS2017
+> Unity2017.3.1f1, VS2017
 
 ## Lang
 > C#
 
 ## 준비물
-> Hdmi,USB,유니티 GUI책?
+> Hdmi,USB
+
+## 공부할것
+> 유니티 GUI
