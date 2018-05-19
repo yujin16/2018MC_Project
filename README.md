@@ -4,6 +4,8 @@
 * ByoungWook Park
 * JungWan Woo
 
+## Environment
+> Windows
 ## Code Repo
 > github
 
@@ -14,7 +16,7 @@
 > C#
 
 ## 준비물
-> Hdmi,USB, 와이파이되는 
+> Hdmi,USB, 와이파이되는 노트북
 
 ## 공부할것
 > 유니티 GUI
