@@ -1,8 +1,8 @@
 # 2018MC_Project
 
-*Yujin Jo
-*ByoungWook Park
-*JungWan Woo
+* Yujin Jo
+* ByoungWook Park
+* JungWan Woo
 
 ## Code Repo
 > github
