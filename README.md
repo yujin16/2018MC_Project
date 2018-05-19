@@ -10,13 +10,13 @@
 > github
 
 ## IDE
-> Unity2017.3.1f1, VS2017
+> 미정, Visual Studio 2013~
 
 ## Lang
-> C#
+> 미정
 
 ## 준비물
 > Hdmi,USB, 와이파이되는 노트북
 
 ## 공부할것
-> 유니티 GUI
+> 
