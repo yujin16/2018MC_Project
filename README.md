@@ -1,6 +1,6 @@
 # 2018MC_Project
 
-* Yujin Jo
+* Yuin Jo
 * ByoungWook Park
 * JungWan Woo
 
