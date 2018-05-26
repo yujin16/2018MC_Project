@@ -61,6 +61,7 @@
 #include <Windows.h>
 #include "RectLength.h"
 #include "RectVertex.h"
+#include "RectWall.h"
 
 //! [0]
 DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
@@ -106,6 +107,22 @@ DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
 	// myPolygon.replace(1, QPointF(200, -100));
  //    setPolygon(myPolygon);
 
+}
+
+DiagramItem::~DiagramItem()
+{
+	if(rectLength != nullptr)
+	{
+		delete rectLength;
+		delete rectVertexTL;
+		delete rectVertexTR;
+		delete rectVertexBL;
+		delete rectVertexBR;
+		delete rectWallT;
+		delete rectWallR;
+		delete rectWallB;
+		delete rectWallL;
+	}
 }
 //! [0]
 
@@ -188,6 +205,10 @@ void DiagramItem::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
 	rectVertexTR->setPos(this->pos());
 	rectVertexBL->setPos(this->pos());
 	rectVertexBR->setPos(this->pos());
+	rectWallT->setPos(this->pos());
+	rectWallR->setPos(this->pos());
+	rectWallB->setPos(this->pos());
+	rectWallL->setPos(this->pos());
 	QGraphicsPolygonItem::mouseMoveEvent(mouseEvent);
 }
 

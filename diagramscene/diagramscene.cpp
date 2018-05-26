@@ -57,6 +57,7 @@
 #include <Windows.h>
 #include "RectLength.h"
 #include "RectVertex.h"
+#include "RectWall.h"
 
 //! [0]
 DiagramScene::DiagramScene(QMenu *itemMenu, QObject *parent)
@@ -185,6 +186,23 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 				rv4->setPos(mouseEvent->scenePos());
 				item->SetRectVertexBr(rv4);
 				addItem(rv4);
+
+				RectWall* rw = new RectWall(item, RectWall::WALL_TOP);
+				rw->setPos(mouseEvent->scenePos());
+				item->SetRectWallT(rw);
+				addItem(rw);
+				RectWall* rw2 = new RectWall(item, RectWall::WALL_RIGHT);
+				rw2->setPos(mouseEvent->scenePos());
+				item->SetRectWallR(rw2);
+				addItem(rw2);
+				RectWall* rw3 = new RectWall(item, RectWall::WALL_BOTTOM);
+				rw3->setPos(mouseEvent->scenePos());
+				item->SetRectWallB(rw3);
+				addItem(rw3);
+				RectWall* rw4 = new RectWall(item, RectWall::WALL_LEFT);
+				rw4->setPos(mouseEvent->scenePos());
+				item->SetRectWallL(rw4);
+				addItem(rw4);
 			}
 
             emit itemInserted(item);
