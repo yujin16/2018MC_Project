@@ -7,9 +7,9 @@ RectWindow::RectWindow(RectWall * rectWall, const QPointF & center)
 	: rectWall(rectWall),
 	  center(center)
 {
-	setFlag(QGraphicsItem::ItemIsMovable, true);
-	setFlag(QGraphicsItem::ItemIsSelectable, true);
-	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+	// setFlag(QGraphicsItem::ItemIsMovable, true);
+	// setFlag(QGraphicsItem::ItemIsSelectable, true);
+	// setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 }
 
 QRectF RectWindow::boundingRect() const
@@ -27,7 +27,8 @@ void RectWindow::paint(QPainter *                       painter,
 {
 	QRectF boundRec = boundingRect();
 	QPen recPen(Qt::blue);
-	recPen.setWidth(3);
+	recPen.setWidth(6);
+	recPen.setStyle(Qt::PenStyle::SolidLine);
  //
 	// qreal startX = rectWall->scenePos().x() + rectWall->boundingRect().x();
 	// qreal startY = rectWall->scenePos().y() + rectWall->boundingRect().y();
@@ -36,13 +37,12 @@ void RectWindow::paint(QPainter *                       painter,
 	// QPointF rectStart = QPointF(startX, startY);
 	// QPointF rectEnd = QPointF(tarX, tarY);
 	// QPointF vec = rectEnd - rectStart;
-	qreal startX = rectWall->scenePos().x() + rectWall->boundingRect().x();
-	qreal startY = rectWall->scenePos().y() + rectWall->boundingRect().y();
+	qreal startX = rectWall->scenePos().x() + rectWall->boundingRect().x()+3;
+	qreal startY = rectWall->scenePos().y() + rectWall->boundingRect().y()+3;
 	QPointF rectPos = QPointF(startX, startY);
-	QPointF len = QPointF(rectWall->boundingRect().width(), rectWall->boundingRect().height());
 
 
-	QPointF startPos = QPointF(boundRec.x(), boundRec.y());
+	QPointF startPos = QPointF(boundRec.x()+3, boundRec.y()+3);
 	QPointF endPos = QPointF(boundRec.x() + boundRec.width()-3, boundRec.y() + boundRec.height()-3);;
 	QPointF arrow = endPos - startPos;
 	QPointF drawS = startPos + arrow*ratio;
@@ -55,8 +55,6 @@ void RectWindow::paint(QPainter *                       painter,
 
 	painter->setPen(recPen);
 	painter->drawLine(drawS, tarDrawS);
-	// painter->drawLine(startPos, endPos);
-	// painter->drawLine(-0.5*vec,0.5*vec);
 }
 
 void RectWindow::Move(QPointF pos)
@@ -80,13 +78,13 @@ void RectWindow::SetRatio(QPointF mousePos)
 
 
 	QRectF boundRec = boundingRect();
-	QPointF startPos = QPointF(boundRec.x(), boundRec.y());
+	QPointF startPos = QPointF(boundRec.x()+3, boundRec.y()+3);
 	QPointF endPos = QPointF(boundRec.x() + boundRec.width() - 3, boundRec.y() + boundRec.height() - 3);;
 	QPointF arrow = endPos - startPos;
 	qreal arrowLen = qSqrt(arrow.x()*arrow.x() + arrow.y()*arrow.y());
 
-	qreal startX = rectWall->scenePos().x() + rectWall->boundingRect().x();
-	qreal startY = rectWall->scenePos().y() + rectWall->boundingRect().y();
+	qreal startX = rectWall->scenePos().x() + rectWall->boundingRect().x()+3;
+	qreal startY = rectWall->scenePos().y() + rectWall->boundingRect().y()+3;
 	QPointF rectStart = QPointF(startX, startY);
 
 	QPointF diff = mousePos- rectStart;

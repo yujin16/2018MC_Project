@@ -59,11 +59,12 @@ void RectVertex::paint(QPainter *                       painter,
                        QWidget *                        widget)
 {
 	QRectF rec = boundingRect();
+	// painter->eraseRect(rec);
+
 	QPen   pointpen(Qt::red);
-	pointpen.setWidth(5);
 
 	painter->setPen(pointpen);
-	painter->drawPoint(QPoint(rec.x(), rec.y()));
+	painter->drawRect(rec);
 }
 
 void RectVertex::mousePressEvent(QGraphicsSceneMouseEvent * event)
