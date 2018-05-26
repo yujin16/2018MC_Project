@@ -53,6 +53,7 @@
 #include "diagramscene.h"
 #include "diagramtextitem.h"
 #include "mainwindow.h"
+#include <QDebug>
 
 #include <QtWidgets>
 
@@ -304,6 +305,10 @@ void MainWindow::handleFontChange()
 //! [18]
 
 //! [19]
+/*
+* <text Only>
+ * diagramscene itemSelected ->  this method called( by signal/slot)
+ */
 void MainWindow::itemSelected(QGraphicsItem *item)
 {
     DiagramTextItem *textItem =

@@ -53,6 +53,7 @@
 
 #include <QTextCursor>
 #include <QGraphicsSceneMouseEvent>
+#include <Windows.h>
 
 //! [0]
 DiagramScene::DiagramScene(QMenu *itemMenu, QObject *parent)
@@ -157,6 +158,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             emit itemInserted(item);
             break;
 //! [6] //! [7]
+			//PBW Draw Line
         case InsertLine:
             line = new QGraphicsLineItem(QLineF(mouseEvent->scenePos(),
                                         mouseEvent->scenePos()));
@@ -177,6 +179,10 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             textItem->setDefaultTextColor(myTextColor);
             textItem->setPos(mouseEvent->scenePos());
             emit textInserted(textItem);
+			break;
+		case MoveItem:
+			OutputDebugString(L"Move Item");
+			break;
 //! [8] //! [9]
     default:
         ;

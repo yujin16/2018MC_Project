@@ -55,6 +55,7 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
+#include <Windows.h>
 
 //! [0]
 DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
@@ -160,5 +161,18 @@ QVariant DiagramItem::itemChange(GraphicsItemChange change, const QVariant &valu
     }
 
     return value;
+}
+
+void DiagramItem::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
+{
+	OutputDebugString(L"Hello");
+}
+
+void DiagramItem::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
+{
+}
+
+void DiagramItem::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
+{
 }
 //! [6]
