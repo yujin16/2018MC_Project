@@ -98,14 +98,10 @@ DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
                       << QPointF(-120, -80);
             break;
     }
-	// setCursor(Qt::CursorShape::UpArrowCursor);
     setPolygon(myPolygon);
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-
-	// myPolygon.replace(1, QPointF(200, -100));
- //    setPolygon(myPolygon);
 
 }
 
@@ -209,6 +205,10 @@ void DiagramItem::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
 	rectWallR->setPos(this->pos());
 	rectWallB->setPos(this->pos());
 	rectWallL->setPos(this->pos());
+	rectWallT->MoveWindows(this->pos());
+	rectWallR->MoveWindows(this->pos());
+	rectWallB->MoveWindows(this->pos());
+	rectWallL->MoveWindows(this->pos());
 	QGraphicsPolygonItem::mouseMoveEvent(mouseEvent);
 }
 

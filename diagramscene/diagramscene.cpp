@@ -120,6 +120,8 @@ void DiagramScene::setFont(const QFont &font)
             item->setFont(myFont);
     }
 }
+
+
 //! [4]
 
 void DiagramScene::setMode(Mode mode)
@@ -157,13 +159,23 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         case InsertItem:
 			// #wjw
 			if (myItemType == DiagramItem::DiagramType(1)) // if door
-				if (this->selectedItems().isEmpty())
+				if (this->selectedItems().isEmpty()) {
 					break;
+				}
 			// #wjw
+			//PBW
+			// if Window 
+			if (myItemType == DiagramItem::DiagramType::Window)
+			{
+				// RectWall will handle this
+				break;
+			}
+			//PBW
             item = new DiagramItem(myItemType, myItemMenu);
             item->setBrush(myItemColor);
             addItem(item);
             item->setPos(mouseEvent->scenePos());
+			if (myItemType == DiagramItem::DiagramType::Step) // if door
 			{
 				RectLength* rl = new RectLength(item);
 				rl->setPos(mouseEvent->scenePos());

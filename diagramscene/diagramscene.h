@@ -84,6 +84,18 @@ public:
     void setItemColor(const QColor &color);
     void setFont(const QFont &font);
 
+
+
+	DiagramItem::DiagramType GetMyItemType() const
+	{
+		return myItemType;
+	}
+
+
+	Mode GetMyMode() const
+	{
+		return myMode;
+	}
 public slots:
     void setMode(Mode mode);
     void setItemType(DiagramItem::DiagramType type);
@@ -91,6 +103,7 @@ public slots:
 
 signals:
     void itemInserted(DiagramItem *item);
+    void itemInsertedOther(DiagramItem::DiagramType type,QGraphicsItem *item);
     void textInserted(QGraphicsTextItem *item);
     void itemSelected(QGraphicsItem *item);
 
@@ -113,6 +126,7 @@ private:
     QColor myTextColor;
     QColor myItemColor;
     QColor myLineColor;
+
 };
 //! [0]
 

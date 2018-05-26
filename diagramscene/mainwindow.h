@@ -88,6 +88,7 @@ private slots:
     void bringToFront();
     void sendToBack();
     void itemInserted(DiagramItem *item);
+	void itemInsertedOther(DiagramItem::DiagramType type, QGraphicsItem *item);
     void textInserted(QGraphicsTextItem *item);
     void currentFontChanged(const QFont &font);
     void fontSizeChanged(const QString &size);
@@ -111,6 +112,8 @@ private:
                                         const QString &image);
     QWidget *createCellWidget(const QString &text,
                               DiagramItem::DiagramType type);
+	QWidget *createIconWidget(const QString &text, DiagramItem::DiagramType type, const QString &image);
+
     QMenu *createColorMenu(const char *slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString &image, QColor color);
     QIcon createColorIcon(QColor color);
