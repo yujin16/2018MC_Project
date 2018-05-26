@@ -234,7 +234,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             textItem->setPos(mouseEvent->scenePos());
             emit textInserted(textItem);
 			break;
-		case InsertWasher: case InsertTV: case InsertDesk case InsertRefrig:
+		case InsertWasher: case InsertTV: case InsertDesk: case InsertRefrig:
 			item = new DiagramItem(myItemType, myItemMenu);
 			item->setBrush(myItemColor);
 			addItem(item);
