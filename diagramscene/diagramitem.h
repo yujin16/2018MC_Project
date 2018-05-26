@@ -140,6 +140,9 @@ public:
 		rectVertexBR = rectVertexBr;
 	}
 
+	//PBW open private to public
+    QPolygonF myPolygon;
+
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
@@ -152,7 +155,6 @@ protected:
 
 private:
     DiagramType myDiagramType;
-    QPolygonF myPolygon;
     QMenu *myContextMenu;
     QList<Arrow *> arrows;
 

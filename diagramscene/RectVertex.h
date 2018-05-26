@@ -23,7 +23,9 @@ public:
 protected:
 	DiagramItem* rect;
 	RectVertexType type;
+	QPointF mouseStartPos;
 	void mousePressEvent(QGraphicsSceneMouseEvent *event);
+	void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 };
