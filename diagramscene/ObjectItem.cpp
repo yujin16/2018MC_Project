@@ -37,8 +37,8 @@ void ObejectItem::paint(QPainter *painter,
 
 	switch (rect->diaType()) {
 	case 4: s = "Washer"; break;
-	case 5: s = "Desk"; break;
-	case 6: s = "TV"; break;
+	case 5: s = "TV"; break;
+	case 6: s = "Desk"; break;
 	case 7: s = "Refrig"; break;
 	}
 
