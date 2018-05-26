@@ -344,7 +344,6 @@ void MainWindow::itemInserted(DiagramItem *item)
 	Item_List.append(item);
 }
 
-<<<<<<< HEAD
 void MainWindow::itemInsertedOther(DiagramItem::DiagramType type,
 	QGraphicsItem * item)
 {
@@ -352,8 +351,6 @@ void MainWindow::itemInsertedOther(DiagramItem::DiagramType type,
 	scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
 	buttonGroup->button(int(type))->setChecked(false);
 }
-=======
->>>>>>> 02077316b38db9f4129ddf29ba5870d02fe0d6bd
 //! [7]
 
 void MainWindow::objInserted(QGraphicsTextItem *)
@@ -505,12 +502,10 @@ void MainWindow::createToolBox()
     connect(buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(buttonGroupClicked(int)));
     QGridLayout *layout = new QGridLayout;
-    layout->addWidget(createIconWidget(tr("Window"), DiagramItem::Window, ":/images/window.png"),0, 1);
-    layout->addWidget(createCellWidget(tr("Room"), DiagramItem::Step),1, 0);
 	// PBW
     layout->addWidget(createCellWidget(tr("Door"), DiagramItem::Door), 0, 0);
-<<<<<<< HEAD
-=======
+    layout->addWidget(createIconWidget(tr("Window"), DiagramItem::Window, ":/images/window.png"),0, 1);
+    layout->addWidget(createCellWidget(tr("Room"), DiagramItem::Step),1, 0);
     
 	layout->addWidget(createCellWidget(tr("Washer"), DiagramItem::Washer), 2, 0);
 	layout->addWidget(createCellWidget(tr("TV"), DiagramItem::TV), 2, 1);
@@ -521,7 +516,6 @@ void MainWindow::createToolBox()
 	//layout->addWidget(createCellWidget(tr("Refrigator"), DiagramItem::Refrig), 4, 1);
 
 	// layout->addWidget(createCellWidget(tr("Input/Output"), DiagramItem::Io), 1, 0);
->>>>>>> 02077316b38db9f4129ddf29ba5870d02fe0d6bd
 //! [21]
 
 	// itemWidget -> layout -> textWidget -> textLayout -> textButton
@@ -535,7 +529,7 @@ void MainWindow::createToolBox()
     textLayout->addWidget(new QLabel(tr("Text")), 1, 1, Qt::AlignCenter);
     QWidget *textWidget = new QWidget;
     textWidget->setLayout(textLayout);
-    layout->addWidget(textWidget, 1, 1);
+    layout->addWidget(textWidget, 4, 0);
 
     layout->setRowStretch(3, 10);
     layout->setColumnStretch(2, 10);
