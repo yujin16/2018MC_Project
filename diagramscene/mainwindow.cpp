@@ -53,13 +53,15 @@
 #include "diagramscene.h"
 #include "diagramtextitem.h"
 #include "mainwindow.h"
+#include "RectVertex.h"
+#include "RectWall.h"
 #include <QDebug>
 #include "Global.h"
 
 #include <QtWidgets>
 
 const int InsertTextButton = 10;
-const int InsertObject = 20;
+
 
 //! [0]
 MainWindow::MainWindow()
@@ -77,8 +79,8 @@ MainWindow::MainWindow()
 		this, SLOT(itemInsertedOther(DiagramItem::DiagramType, QGraphicsItem*)));
     connect(scene, SIGNAL(textInserted(QGraphicsTextItem*)),
             this, SLOT(textInserted(QGraphicsTextItem*)));
-	connect(scene, SIGNAL(objInserted(QGraphicsTextItem*)),
-		this, SLOT(objInserted(QGraphicsTextItem*)));
+	connect(scene, SIGNAL(objInserted(DiagramItem*)),
+		this, SLOT(objInserted(DiagramItem*)));
     connect(scene, SIGNAL(itemSelected(QGraphicsItem*)),
             this, SLOT(itemSelected(QGraphicsItem*)));
 	connect(scene, SIGNAL(valueChanged(QGraphicsItem*)),
@@ -134,8 +136,9 @@ void MainWindow::buttonGroupClicked(int id)
     }
     if (id == InsertTextButton) {
 		scene->setMode(DiagramScene::InsertText);
-	} else if(id == InsertObject) {
-		scene->setMode(DiagramScene::InsertObj);
+	} else if(id == 4 || id == 5 || id == 6 || id == 7) {
+		scene->setItemType(DiagramItem::DiagramType(id));
+		scene->setMode(DiagramScene::Mode(id));
 	} 
 	else {
         scene->setItemType(DiagramItem::DiagramType(id));
@@ -155,7 +158,6 @@ void MainWindow::deleteItem()
             arrow->endItem()->removeArrow(arrow);
 
 			//added by #wjw
-			// added by #wjw
 			for (auto it = Item_List.begin(); it != Item_List.end(); it++)
 			{
 				if (*it == item)
@@ -237,22 +239,56 @@ bool MainWindow::SaveAs()
 bool MainWindow::saveFile(const QString &fileName)
 {
 	QFile file(fileName);
-	if (!file.open(QFile::WriteOnly)) {
+	if (!file.open(QFile::WriteOnly | QFile::Text)) {
 		QMessageBox::warning(this, tr("Application"),
 			tr("Cannot write file %1:\n%2.")
 			.arg(QDir::toNativeSeparators(fileName),
 				file.errorString()));
 		return false;
-	}
-	QDataStream out(&file);
-	out.setVersion(QDataStream::Qt_5_10);
+	}	
+	QTextStream out(&file);
+	// out.setVersion(QDataStream::Qt_5_10);
 	// QTextStream out(&file);
 	// out << textEdit->toPlainText();
 	// out << scene->items();  // is this doing alright?? #wjw
 	
-	for (int i = 0; i < scene->items().size(); i++)
-		qDebug() << scene->items()[i];
+	QVector<RectWindow*> temp_vector;
+	for (int i = 0; i < Item_List.size(); i++)
+	{
+		out << "item#" << i << "\n";
+		out << Item_List[i]->diagramType() << "\n";
+		for (int j = 0; j < 4; j++)
+			out << Item_List[i]->myPolygon.at(j).x() << "," << Item_List[i]->myPolygon.at(j).y() << "\n";
 
+		if (Item_List[i]->diagramType() != 0)
+			continue;
+		out << Item_List[i]->GetRectVertexTl()->x() << "," << Item_List[i]->GetRectVertexTl()->y() << "\n";
+		out << Item_List[i]->GetRectVertexTr()->x() << "," << Item_List[i]->GetRectVertexTr()->y() << "\n";
+		out << Item_List[i]->GetRectVertexBl()->x() << "," << Item_List[i]->GetRectVertexBl()->y() << "\n";
+		out << Item_List[i]->GetRectVertexBr()->x() << "," << Item_List[i]->GetRectVertexBr()->y();
+		out << "\n#IT:";
+		temp_vector = Item_List[i]->GetRectWallT()->Get_Windows();
+		if (!temp_vector.isEmpty()) // if non empty
+			for (auto it = temp_vector.begin(); it != temp_vector.end(); it++)
+				out << (*it)->Get_Center().x() << "," << (*it)->Get_Center().y() << ":";
+		out << "\n#IR:";
+		temp_vector = Item_List[i]->GetRectWallR()->Get_Windows();
+		if (!temp_vector.isEmpty()) // if non empty
+			for (auto it = temp_vector.begin(); it != temp_vector.end(); it++)
+				out << (*it)->Get_Center().x() << "," << (*it)->Get_Center().y() << ":";
+		out << "\n#IB:";
+		temp_vector = Item_List[i]->GetRectWallB()->Get_Windows();
+		if (!temp_vector.isEmpty()) // if non empty
+			for (auto it = temp_vector.begin(); it != temp_vector.end(); it++)
+				out << (*it)->Get_Center().x() << "," << (*it)->Get_Center().y() << ":";
+		out << "\n#IL:";
+		temp_vector = Item_List[i]->GetRectWallL()->Get_Windows();
+		if (!temp_vector.isEmpty()) // if non empty
+			for (auto it = temp_vector.begin(); it != temp_vector.end(); it++)
+				out << (*it)->Get_Center().x() << "," << (*it)->Get_Center().y() << ":";
+		out << "\n##";
+	}
+		
 	setCurrentFile(fileName);
 	file.close();
 
@@ -291,10 +327,29 @@ void MainWindow::loadFile(const QString &fileName)
 		return;
 	}
 
-	QDataStream in(&file);
-	in.setVersion(QDataStream::Qt_5_10);
+	QTextStream in(&file);
+	// in.setVersion(QDataStream::Qt_5_10);
 	// textEdit->setPlainText(in.readAll());  // reference #wjw http://www.java2s.com/Code/Cpp/Qt/SavingfilewithQDataStream.htm
 	// in >> list;  // does this work??
+	QString line;
+	DiagramItem *item_;
+	QStringList substrs;
+	while (true)
+	{
+		in >> line;
+		if (line == "##")
+			break;
+		in >> line;
+		item_ = new DiagramItem(DiagramItem::DiagramType(line.toInt()), itemMenu);
+		scene->addItem(item_);
+		for (int i = 0; i < 4; i++)
+		{
+			in >> line;
+			substrs = line.split(",");
+			
+			
+		}
+	}
 	file.close();
 
 
@@ -353,10 +408,33 @@ void MainWindow::itemInsertedOther(DiagramItem::DiagramType type,
 }
 //! [7]
 
-void MainWindow::objInserted(QGraphicsTextItem *)
+void MainWindow::objInserted(DiagramItem *item)
 {
-	buttonGroup->button(InsertTextButton)->setChecked(false);
-	scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
+	buttonGroup->button(4)->setChecked(false);
+	buttonGroup->button(5)->setChecked(false);
+	buttonGroup->button(6)->setChecked(false);
+	buttonGroup->button(7)->setChecked(false);
+	scene->setMode(DiagramScene::Mode(3));
+
+	char buff[100];
+	sprintf(buff, "\ntype : %d\n", pointerTypeGroup->checkedId());
+	OutputDebugStringA(buff);
+
+
+	buttonGroup->button(int(item->diagramType()))->setChecked(false);
+	if (item->diagramType() == DiagramItem::DiagramType(1)) // 1 is door
+	{
+		if (scene->selectedItems().isEmpty())
+		{
+			item->setSelected(true);
+			// deleteItem();
+		}
+		else
+		{
+			item->setPos(scene->selectedItems().first()->x(), scene->selectedItems().first()->y());
+		}
+
+	}
 }
 
 //! [8]
@@ -775,7 +853,6 @@ QWidget *MainWindow::createCellWidget(const QString &text, DiagramItem::DiagramT
 	QIcon icon(item.image());
 	QToolButton *button = new QToolButton;
 
-
 	switch (type) {
 	case DiagramItem::Step: case DiagramItem::Door:
 		button->setIcon(icon);
@@ -783,23 +860,25 @@ QWidget *MainWindow::createCellWidget(const QString &text, DiagramItem::DiagramT
 		break;
 	case DiagramItem::Washer:
 		button->setIcon(QIcon(QPixmap("images/Washer.png")));
-		buttonGroup->addButton(button, InsertObject);
+		buttonGroup->addButton(button, 4);
+		OutputDebugString(L"washer\n");
 		break;
 	case DiagramItem::TV:
 		button->setIcon(QIcon(QPixmap("images/CableTV.png")));
-		buttonGroup->addButton(button, InsertObject);
+		buttonGroup->addButton(button, 5);
+		OutputDebugString(L"tv\n");
 		break;
 	case DiagramItem::Desk:
 		button->setIcon(QIcon(QPixmap("images/Desk.png")));
-		buttonGroup->addButton(button, InsertObject);
+		buttonGroup->addButton(button, 6);
+		OutputDebugString(L"desk\n");
 		break;
 	case DiagramItem::Refrig:
 		button->setIcon(QIcon(QPixmap("images/Refrigerator.png")));
-		buttonGroup->addButton(button, InsertObject);
+		buttonGroup->addButton(button, 7);
+		OutputDebugString(L"refrigerator\n");
 		break;
 	}
-
-	//InsertObject
 
 	button->setCheckable(true);
 	button->setIconSize(QSize(50, 50));

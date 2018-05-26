@@ -1,19 +1,34 @@
 #pragma once
 #include <QLabel>
+#include <QImage>
+#include <QPixmap>
+#include <QImage>
+#include <QPainter>
 #include "diagramitem.h"
 
-class ObjectItem : public QGraphicsTextItem
+class ObejectItem :public QGraphicsItem
 {
 public:
-	ObjectItem(QGraphicsItem *parent = 0);
+	ObejectItem(DiagramItem* rect);
+
+	QRectF boundingRect() const;
+	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+protected:
+	QLabel *label;
 	QImage image;
 	QPixmap buffer;
 
-	void setImage(QString path);
-
-protected:
-	//void mousePressEvent(QGraphicsSceneMouseEvent *event);
-	//void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
-	//void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+	DiagramItem* rect;
+	void mousePressEvent(QGraphicsSceneMouseEvent *event);
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 };
+
+/*label = new QLabel(parent);
+
+			image.load("images/Washer.png");
+			buffer = QPixmap::fromImage(image);
+
+			label->setPixmap(buffer);
+			label->show();*/

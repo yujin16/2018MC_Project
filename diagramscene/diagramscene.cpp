@@ -55,6 +55,9 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <Windows.h>
+#include <QLabel>
+#include <QImage>
+#include <QPixmap>
 #include "RectLength.h"
 #include "RectVertex.h"
 #include "RectWall.h"
@@ -156,7 +159,6 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         return;
 
     DiagramItem *item;
-	ObjectItem *obj;
     switch (myMode) {
         case InsertItem:
 			// #wjw
@@ -178,7 +180,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             item->setBrush(myItemColor);
             addItem(item);
             item->setPos(mouseEvent->scenePos());
-			if (myItemType == DiagramItem::DiagramType::Step) // if door
+			if (myItemType == DiagramItem::DiagramType::Step) 
 			{
 				RectLength* rl = new RectLength(item);
 				rl->setPos(mouseEvent->scenePos());
@@ -247,11 +249,61 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             textItem->setPos(mouseEvent->scenePos());
             emit textInserted(textItem);
 			break;
-		case InsertObj:
-			obj = new ObjectItem();
-			obj->setImage("images/Washer.png");
+		case InsertWasher: case InsertTV: case InsertDesk: case InsertRefrig:
+			item = new DiagramItem(myItemType, myItemMenu);
+			item->setBrush(myItemColor);
+			addItem(item);
+			item->setPos(mouseEvent->scenePos());
+			{
 
-			//emit objInserted(obj);
+				char buff[100];
+				sprintf(buff, "%d", myItemType);
+				OutputDebugStringA(buff);
+
+				ObejectItem* obj = new ObejectItem(item);
+				obj->setPos(mouseEvent->scenePos());
+				//item->SetRectLength(obj);
+				addItem(obj);
+			}
+			emit objInserted(item);
+
+			/*QImage image("images/Washer.png");
+
+			QGraphicsPixmapItem item(QPixmap::fromImage(image));
+			addItem(&item);
+			QGraphicsView view = new QGraphicsView();
+			view.show();
+
+			QPixmap buf = QPixmap::fromImage(image);
+
+			buf = buf.scaled(50, 50);
+
+
+			QGraphicsScene* scene = new QGraphicsScene;
+			graphicsView->setScene(scene);
+
+			scene->addPixmap(buf);*/
+
+
+
+
+			//widget = new QWidget;
+			/*label = new QLabel();
+
+			image.load("images/Washer.png");
+			buffer = QPixmap::fromImage(image);
+
+			label->setPixmap(buffer);
+			widget->move(200, 200);
+			label->show();*/
+
+
+			//objItem = new ObjectItem(this);
+
+			//objItem->setImage("images/Washer.png");
+			//addItem(objItem);
+
+			//emit objInserted(item);
 
 			//label->setPixmap(buffer);
 			//label->show();

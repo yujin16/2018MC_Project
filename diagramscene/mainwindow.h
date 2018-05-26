@@ -94,7 +94,7 @@ private slots:
     void itemInserted(DiagramItem *item);
 	void itemInsertedOther(DiagramItem::DiagramType type, QGraphicsItem *item);
     void textInserted(QGraphicsTextItem *item);
-	void objInserted(QGraphicsTextItem *item);
+	void objInserted(DiagramItem *item);
     void currentFontChanged(const QFont &font);
     void fontSizeChanged(const QString &size);
     void sceneScaleChanged(const QString &scale);
