@@ -69,6 +69,7 @@ class QPolygonF;
 QT_END_NAMESPACE
 
 class Arrow;
+class RectLength;
 
 //! [0]
 class DiagramItem : public QGraphicsPolygonItem
@@ -88,6 +89,15 @@ public:
     int type() const override { return Type;}
 
 
+	RectLength * GetRectLength() const
+	{
+		return rectLength;
+	}
+
+	void SetRectLength(RectLength * rectLength)
+	{
+		this->rectLength = rectLength;
+	}
 
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
@@ -104,6 +114,8 @@ private:
     QPolygonF myPolygon;
     QMenu *myContextMenu;
     QList<Arrow *> arrows;
+
+	RectLength* rectLength;
 
 };
 //! [0]

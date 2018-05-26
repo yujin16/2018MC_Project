@@ -59,6 +59,7 @@
 #include "Global.h"
 #include <QPainter>
 #include <Windows.h>
+#include "RectLength.h"
 
 //! [0]
 DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
@@ -178,6 +179,7 @@ void DiagramItem::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 void DiagramItem::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
 	OutputDebugString(L"Move");
+	rectLength->setPos(this->pos());
 	QGraphicsPolygonItem::mouseMoveEvent(mouseEvent);
 }
 
