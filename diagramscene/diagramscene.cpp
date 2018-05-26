@@ -154,6 +154,11 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     DiagramItem *item;
     switch (myMode) {
         case InsertItem:
+			// #wjw
+			if (myItemType == DiagramItem::DiagramType(1)) // if door
+				if (this->selectedItems().isEmpty())
+					break;
+			// #wjw
             item = new DiagramItem(myItemType, myItemMenu);
             item->setBrush(myItemColor);
             addItem(item);
@@ -181,6 +186,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 				item->SetRectVertexBr(rv4);
 				addItem(rv4);
 			}
+
             emit itemInserted(item);
             break;
 //! [6] //! [7]
