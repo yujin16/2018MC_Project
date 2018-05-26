@@ -54,6 +54,7 @@
 #include "diagramtextitem.h"
 #include "mainwindow.h"
 #include <QDebug>
+#include "Global.h"
 
 #include <QtWidgets>
 
@@ -68,9 +69,12 @@ MainWindow::MainWindow()
     createMenus();
 
     scene = new DiagramScene(itemMenu, this);
+	g_scene = scene;
     scene->setSceneRect(QRectF(0, 0, 5000, 5000));
     connect(scene, SIGNAL(itemInserted(DiagramItem*)),
             this, SLOT(itemInserted(DiagramItem*)));
+	connect(scene, SIGNAL(itemInsertedOther(DiagramItem::DiagramType,QGraphicsItem*)),
+		this, SLOT(itemInsertedOther(DiagramItem::DiagramType, QGraphicsItem*)));
     connect(scene, SIGNAL(textInserted(QGraphicsTextItem*)),
             this, SLOT(textInserted(QGraphicsTextItem*)));
 	connect(scene, SIGNAL(objInserted(QGraphicsTextItem*)),
@@ -343,6 +347,13 @@ void MainWindow::itemInserted(DiagramItem *item)
 	Item_List.append(item);
 }
 
+void MainWindow::itemInsertedOther(DiagramItem::DiagramType type,
+	QGraphicsItem * item)
+{
+	pointerTypeGroup->button(int(DiagramScene::MoveItem))->setChecked(true);
+	scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
+	buttonGroup->button(int(type))->setChecked(false);
+}
 //! [7]
 
 void MainWindow::objInserted(QGraphicsTextItem *)
@@ -494,9 +505,10 @@ void MainWindow::createToolBox()
     connect(buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(buttonGroupClicked(int)));
     QGridLayout *layout = new QGridLayout;
-    layout->addWidget(createCellWidget(tr("Room"), DiagramItem::Step),0, 1);
 	// PBW
     layout->addWidget(createCellWidget(tr("Door"), DiagramItem::Door), 0, 0);
+    layout->addWidget(createIconWidget(tr("Window"), DiagramItem::Window, ":/images/window.png"),0, 1);
+    layout->addWidget(createCellWidget(tr("Room"), DiagramItem::Step),1, 0);
     
 	layout->addWidget(createCellWidget(tr("Washer"), DiagramItem::Washer), 2, 0);
 	layout->addWidget(createCellWidget(tr("TV"), DiagramItem::TV), 2, 1);
@@ -517,10 +529,10 @@ void MainWindow::createToolBox()
     textButton->setIconSize(QSize(50, 50));
     QGridLayout *textLayout = new QGridLayout;
     textLayout->addWidget(textButton, 0, 0, Qt::AlignHCenter);
-    textLayout->addWidget(new QLabel(tr("Text")), 1, 0, Qt::AlignCenter);
+    textLayout->addWidget(new QLabel(tr("Text")), 1, 1, Qt::AlignCenter);
     QWidget *textWidget = new QWidget;
     textWidget->setLayout(textLayout);
-    layout->addWidget(textWidget, 1, 1);
+    layout->addWidget(textWidget, 4, 0);
 
     layout->setRowStretch(3, 10);
     layout->setColumnStretch(2, 10);
@@ -794,6 +806,27 @@ QWidget *MainWindow::createCellWidget(const QString &text, DiagramItem::DiagramT
 
 	button->setCheckable(true);
 	button->setIconSize(QSize(50, 50));
+
+	QGridLayout *layout = new QGridLayout;
+	layout->addWidget(button, 0, 0, Qt::AlignHCenter);
+	layout->addWidget(new QLabel(text), 1, 0, Qt::AlignCenter);
+
+	QWidget *widget = new QWidget;
+	widget->setLayout(layout);
+
+	return widget;
+}
+QWidget *MainWindow::createIconWidget(const QString &text, DiagramItem::DiagramType type, const QString &image)
+{
+
+	DiagramItem item(type, itemMenu);
+	QIcon icon(item.image());
+
+	QToolButton *button = new QToolButton;
+	button->setIcon(QIcon(image));
+	button->setIconSize(QSize(50, 50));
+	button->setCheckable(true);
+	buttonGroup->addButton(button, int(type));
 
 	QGridLayout *layout = new QGridLayout;
 	layout->addWidget(button, 0, 0, Qt::AlignHCenter);

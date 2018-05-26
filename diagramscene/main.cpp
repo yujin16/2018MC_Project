@@ -53,7 +53,8 @@
 #include <QApplication>
 #include <QPainter>
 
-MainWindow* g_mainWindow;
+MainWindow* g_mainWindow = nullptr;
+DiagramScene* g_scene = nullptr;
 
 int main(int argv, char *args[])
 {

@@ -92,6 +92,7 @@ private slots:
 	bool SaveAs();
 	void Open();
     void itemInserted(DiagramItem *item);
+	void itemInsertedOther(DiagramItem::DiagramType type, QGraphicsItem *item);
     void textInserted(QGraphicsTextItem *item);
 	void objInserted(QGraphicsTextItem *item);
     void currentFontChanged(const QFont &font);
@@ -121,6 +122,8 @@ private:
                                         const QString &image);
     QWidget *createCellWidget(const QString &text,
                               DiagramItem::DiagramType type);
+	QWidget *createIconWidget(const QString &text, DiagramItem::DiagramType type, const QString &image);
+
     QMenu *createColorMenu(const char *slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString &image, QColor color);
     QIcon createColorIcon(QColor color);

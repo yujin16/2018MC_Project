@@ -4,6 +4,9 @@
 #include <QBrush>
 #include <QPainter>
 #include "diagramitem.h"
+#include "RectWindow.h"
+
+class DiagramScene;
 
 class RectWall :public QGraphicsItem
 {
@@ -16,13 +19,16 @@ public:
 		WALL_LEFT
 	};
 	RectWall(DiagramItem* rect, RectWallType type);
+	~RectWall();
 
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+	void MoveWindows(QPointF pos);
 
 protected:
 	DiagramItem* rect;
 	RectWallType type;
+	QVector<RectWindow*> windows;
 	QPointF mouseStartPos;
 	void mousePressEvent(QGraphicsSceneMouseEvent *event);
 	void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
