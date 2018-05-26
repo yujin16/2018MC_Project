@@ -71,6 +71,7 @@ DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
     myDiagramType = diagramType;
     myContextMenu = contextMenu;
 
+
     QPainterPath path;
     switch (myDiagramType) {
         case StartEnd:
@@ -92,6 +93,11 @@ DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
                       << QPointF(100, 100) << QPointF(-100, 100)
                       << QPointF(-100, -100);
             break;
+		case Washer: case Desk: case TV: case Refrig:
+			myPolygon << QPointF(-25, -25) << QPointF(25, -25)
+				<< QPointF(25, 25) << QPointF(-25, 25)
+				<< QPointF(-25, -25);
+			break;
         default:
             myPolygon << QPointF(-120, -80) << QPointF(-70, 80)
                       << QPointF(120, 80) << QPointF(70, -80)

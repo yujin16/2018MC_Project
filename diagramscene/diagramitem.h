@@ -90,6 +90,7 @@ public:
     void addArrow(Arrow *arrow);
     QPixmap image() const;
     int type() const override { return Type;}
+	int diaType() { return (int)myDiagramType; }
 
 
 	RectLength * GetRectLength() const
