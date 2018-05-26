@@ -87,6 +87,8 @@ private slots:
     void pointerGroupClicked(int id);
     void bringToFront();
     void sendToBack();
+	bool Save();
+	bool SaveAs();
     void itemInserted(DiagramItem *item);
     void textInserted(QGraphicsTextItem *item);
     void currentFontChanged(const QFont &font);
@@ -103,10 +105,12 @@ private slots:
     void about();
 
 private:
+	bool saveFile(const QString &fileName);
     void createToolBox();
     void createActions();
     void createMenus();
     void createToolbars();
+	void setCurrentFile(const QString &fileName);
     QWidget *createBackgroundCellWidget(const QString &text,
                                         const QString &image);
     QWidget *createCellWidget(const QString &text,
@@ -125,6 +129,8 @@ private:
     QAction *toFrontAction;
     QAction *sendBackAction;
     QAction *aboutAction;
+	QAction *saveAction;
+	QAction *saveAsAction;
 
     QMenu *fileMenu;
     QMenu *itemMenu;
@@ -154,6 +160,8 @@ private:
     QAction *textAction;
     QAction *fillAction;
     QAction *lineAction;
+
+	QString curFile;
 };
 //! [0]
 

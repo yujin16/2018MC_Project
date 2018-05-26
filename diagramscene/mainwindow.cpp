@@ -193,6 +193,52 @@ void MainWindow::sendToBack()
     }
     selectedItem->setZValue(zValue);
 }
+bool MainWindow::Save()
+{
+	if (curFile.isEmpty()) {
+		return SaveAs();
+	}
+	else {
+		return saveFile(curFile);
+	}
+}
+bool MainWindow::SaveAs()
+{
+	QFileDialog dialog(this); // file 저장 경로 지정 창 띄우기
+	dialog.setWindowModality(Qt::WindowModal);
+	dialog.setAcceptMode(QFileDialog::AcceptSave);
+	if (dialog.exec() != QDialog::Accepted)
+		return false;
+	return saveFile(dialog.selectedFiles().first());
+}
+bool MainWindow::saveFile(const QString &fileName)
+{
+	QFile file(fileName);
+	if (!file.open(QFile::WriteOnly | QFile::Text)) {
+		QMessageBox::warning(this, tr("Application"),
+			tr("Cannot write file %1:\n%2.")
+			.arg(QDir::toNativeSeparators(fileName),
+				file.errorString()));
+		return false;
+	}
+	QTextStream out(&file);
+
+	setCurrentFile(fileName);
+	statusBar()->showMessage(tr("File saved"), 2000);
+	return true;
+}
+
+void MainWindow::setCurrentFile(const QString &fileName)
+{
+	curFile = fileName;
+	// textEdit->document()->setModified(false);
+	setWindowModified(false);
+
+	QString shownName = curFile;
+	if (curFile.isEmpty())
+		shownName = "untitled.txt";
+	setWindowFilePath(shownName);
+}
 //! [6]
 
 //! [7]
@@ -208,7 +254,6 @@ void MainWindow::itemInserted(DiagramItem *item)
 			item->setSelected(true);
 			// deleteItem();
 		}
-			
 		else
 		{
 			item->setPos(scene->selectedItems().first()->x(), scene->selectedItems().first()->y());
@@ -461,6 +506,14 @@ void MainWindow::createActions()
     aboutAction = new QAction(tr("A&bout"), this);
     aboutAction->setShortcut(tr("F1"));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
+
+	saveAction = new QAction(tr("S&ave"), this);
+	aboutAction->setShortcut(tr("Ctrl+S"));
+	connect(saveAction, SIGNAL(triggered()), this, SLOT(Save()));
+
+	saveAsAction = new QAction(tr("S&ave As"), this);
+	aboutAction->setShortcut(tr("Ctrl+Shift+S"));
+	connect(saveAsAction, SIGNAL(triggered()), this, SLOT(SaveAs()));
 }
 
 //! [24]
@@ -470,7 +523,10 @@ void MainWindow::createActions()
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(exitAction);
+	fileMenu->addAction(saveAction);
+	fileMenu->addAction(saveAsAction);
+	fileMenu->addAction(exitAction);
+	
 
     itemMenu = menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(deleteAction);
