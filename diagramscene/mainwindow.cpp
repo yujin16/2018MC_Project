@@ -136,9 +136,29 @@ void MainWindow::buttonGroupClicked(int id)
     }
     if (id == InsertTextButton) {
 		scene->setMode(DiagramScene::InsertText);
-	} else if(id == 4 || id == 5 || id == 6 || id == 7) {
+	} else if(id == DiagramItem::DiagramType::Washer
+		|| id == DiagramItem::DiagramType::Desk
+		|| id == DiagramItem::DiagramType::TV
+		|| id == DiagramItem::DiagramType::Refrig) {
+
+		DiagramItem::DiagramType type = (DiagramItem::DiagramType)id;
+
 		scene->setItemType(DiagramItem::DiagramType(id));
-		scene->setMode(DiagramScene::Mode(id));
+		switch(type)
+		{
+		case DiagramItem::Washer:
+			scene->setMode(DiagramScene::Mode::InsertWasher);
+			break;
+		case DiagramItem::Desk:
+			scene->setMode(DiagramScene::Mode::InsertDesk);
+			break;
+		case DiagramItem::TV:
+			scene->setMode(DiagramScene::Mode::InsertTV);
+			break;
+		case DiagramItem::Refrig:
+			scene->setMode(DiagramScene::Mode::InsertRefrig);
+			break;
+		}
 	} 
 	else {
         scene->setItemType(DiagramItem::DiagramType(id));
@@ -860,22 +880,22 @@ QWidget *MainWindow::createCellWidget(const QString &text, DiagramItem::DiagramT
 		break;
 	case DiagramItem::Washer:
 		button->setIcon(QIcon(QPixmap("images/Washer.png")));
-		buttonGroup->addButton(button, 4);
+		buttonGroup->addButton(button, DiagramItem::DiagramType::Washer);
 		OutputDebugString(L"washer\n");
 		break;
 	case DiagramItem::TV:
 		button->setIcon(QIcon(QPixmap("images/CableTV.png")));
-		buttonGroup->addButton(button, 5);
+		buttonGroup->addButton(button, DiagramItem::DiagramType::TV);
 		OutputDebugString(L"tv\n");
 		break;
 	case DiagramItem::Desk:
 		button->setIcon(QIcon(QPixmap("images/Desk.png")));
-		buttonGroup->addButton(button, 6);
+		buttonGroup->addButton(button, DiagramItem::DiagramType::Desk);
 		OutputDebugString(L"desk\n");
 		break;
 	case DiagramItem::Refrig:
 		button->setIcon(QIcon(QPixmap("images/Refrigerator.png")));
-		buttonGroup->addButton(button, 7);
+		buttonGroup->addButton(button, DiagramItem::DiagramType::Refrig);
 		OutputDebugString(L"refrigerator\n");
 		break;
 	}

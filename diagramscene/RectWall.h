@@ -27,13 +27,10 @@ public:
 
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-<<<<<<< HEAD
 	void MoveWindows_Doors(QPointF pos);
 	void UpdateAll();
-=======
 	void MoveWindows(QPointF pos);
 	QVector<RectWindow*> Get_Windows() { return windows; };
->>>>>>> 81e3d1c98b1b014d9f3422eb75a287c16c8b1925
 
 protected:
 	DiagramItem* rect;
