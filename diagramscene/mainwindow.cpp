@@ -204,7 +204,11 @@ void MainWindow::itemInserted(DiagramItem *item)
 	if (item->diagramType() == DiagramItem::DiagramType(1)) // 1 is door
 	{
 		if (scene->selectedItems().isEmpty())
+		{
 			item->setSelected(true);
+			// deleteItem();
+		}
+			
 		else
 		{
 			item->setPos(scene->selectedItems().first()->x(), scene->selectedItems().first()->y());
