@@ -108,6 +108,22 @@ DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
  //    setPolygon(myPolygon);
 
 }
+
+DiagramItem::~DiagramItem()
+{
+	if(rectLength != nullptr)
+	{
+		delete rectLength;
+		delete rectVertexTL;
+		delete rectVertexTR;
+		delete rectVertexBL;
+		delete rectVertexBR;
+		delete rectWallT;
+		delete rectWallR;
+		delete rectWallB;
+		delete rectWallL;
+	}
+}
 //! [0]
 
 //! [1]

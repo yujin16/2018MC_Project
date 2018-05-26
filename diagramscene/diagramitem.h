@@ -81,6 +81,7 @@ public:
     enum DiagramType { Step, Door, StartEnd, Io };
 
     DiagramItem(DiagramType diagramType, QMenu *contextMenu, QGraphicsItem *parent = 0);
+	~DiagramItem();
 
     void removeArrow(Arrow *arrow);
     void removeArrows();
@@ -199,7 +200,7 @@ private:
     QMenu *myContextMenu;
     QList<Arrow *> arrows;
 
-	RectLength* rectLength;
+	RectLength* rectLength = nullptr;
 
 	RectVertex* rectVertexTL;
 	RectVertex* rectVertexTR;

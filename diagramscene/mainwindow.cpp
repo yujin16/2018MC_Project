@@ -408,7 +408,7 @@ void MainWindow::createToolBox()
     toolBox = new QToolBox;
     toolBox->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored));
     toolBox->setMinimumWidth(itemWidget->sizeHint().width());
-    toolBox->addItem(itemWidget, tr("Basic Flowchart Shapes"));
+    toolBox->addItem(itemWidget, tr("Objects"));
     toolBox->addItem(backgroundWidget, tr("Backgrounds"));
 }
 //! [22]
