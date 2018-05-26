@@ -123,7 +123,6 @@ void RectDoor::paint(QPainter *                       painter,
 	painter->setPen(recPen);
 	painter->drawLine(drawS, tarPerpen);
 	painter->drawLine(tarDrawS, tarPerpen);
-	// painter->drawRect(boundRec);
 }
 
 void RectDoor::Move(QPointF pos)

@@ -77,6 +77,7 @@ void RectWindow::paint(QPainter *                       painter,
 
 	painter->setPen(recPen);
 	painter->drawLine(drawS, tarDrawS);
+	// painter->drawRect(boundRec);
 }
 
 void RectWindow::Move(QPointF pos)
@@ -86,9 +87,6 @@ void RectWindow::Move(QPointF pos)
 
 void RectWindow::SetRatio(QPointF mousePos)
 {
-
-
-
 	QRectF boundRec = boundingRect();
 	qreal   startX;
 	qreal   startY;

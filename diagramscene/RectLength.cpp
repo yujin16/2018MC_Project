@@ -18,8 +18,20 @@ void RectLength::paint(QPainter *                       painter,
                        QWidget *                        widget)
 {
 	QRectF rec = boundingRect();
-	painter->drawText(rec,Qt::AlignHCenter | Qt::AlignTop, QString::number(rect->boundingRect().width()));
-	painter->drawText(rec, Qt::AlignCenter | Qt::AlignRight, QString::number(rect->boundingRect().height()));
+	QPointF p0 = rect->myPolygon.at(0);
+	QPointF p1 = rect->myPolygon.at(1);
+	QPointF p2 = rect->myPolygon.at(2);
+	QPointF p3 = rect->myPolygon.at(3);
+
+	qreal p01len= qAbs(p1.x() - p0.x());
+	qreal p12len= qAbs(p2.y() - p1.y());
+	qreal p23len= qAbs(p3.x() - p2.x());
+	qreal p34len= qAbs(p0.y() - p3.y());
+
+	painter->drawText(rec,Qt::AlignHCenter | Qt::AlignTop, QString::number(p01len));
+	painter->drawText(rec, Qt::AlignVCenter | Qt::AlignRight, QString::number(p12len));
+	painter->drawText(rec, Qt::AlignHCenter | Qt::AlignBottom, QString::number(p23len));
+	painter->drawText(rec, Qt::AlignLeft | Qt::AlignVCenter, QString::number(p34len));
 }
 
 void RectLength::mousePressEvent(QGraphicsSceneMouseEvent * event)

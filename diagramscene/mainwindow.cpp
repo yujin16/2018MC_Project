@@ -100,6 +100,9 @@ MainWindow::MainWindow()
     setCentralWidget(widget);
     setWindowTitle(tr("Diagramscene"));
     setUnifiedTitleAndToolBarOnMac(true);
+
+	sceneScaleChanged("150%");
+	sceneScaleCombo->setCurrentIndex(4);
 }
 //! [0]
 
@@ -832,7 +835,7 @@ void MainWindow::createToolbars()
 
     sceneScaleCombo = new QComboBox;
     QStringList scales;
-    scales << tr("50%") << tr("75%") << tr("100%") << tr("125%") << tr("150%");
+    scales << tr("50%") << tr("75%") << tr("100%") << tr("125%") << tr("150%") << tr("200%");
     sceneScaleCombo->addItems(scales);
     sceneScaleCombo->setCurrentIndex(2);
     connect(sceneScaleCombo, SIGNAL(currentIndexChanged(QString)),
