@@ -61,7 +61,6 @@
 #include <QtWidgets>
 
 const int InsertTextButton = 10;
-const int InsertObject = 20;
 
 
 //! [0]
@@ -137,8 +136,9 @@ void MainWindow::buttonGroupClicked(int id)
     }
     if (id == InsertTextButton) {
 		scene->setMode(DiagramScene::InsertText);
-	} else if(id == InsertObject) {
-		scene->setMode(DiagramScene::InsertObj);
+	} else if(id == 4 || id == 5 || id == 6 || id == 7) {
+		scene->setItemType(DiagramItem::DiagramType(id));
+		scene->setMode(DiagramScene::Mode(id));
 	} 
 	else {
         scene->setItemType(DiagramItem::DiagramType(id));
@@ -408,7 +408,7 @@ void MainWindow::itemInsertedOther(DiagramItem::DiagramType type,
 }
 //! [7]
 
-void MainWindow::objInserted(QGraphicsTextItem *)
+void MainWindow::objInserted(DiagramItem *)
 {
 	buttonGroup->button(InsertTextButton)->setChecked(false);
 	scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
@@ -830,7 +830,6 @@ QWidget *MainWindow::createCellWidget(const QString &text, DiagramItem::DiagramT
 	QIcon icon(item.image());
 	QToolButton *button = new QToolButton;
 
-
 	switch (type) {
 	case DiagramItem::Step: case DiagramItem::Door:
 		button->setIcon(icon);
@@ -838,23 +837,25 @@ QWidget *MainWindow::createCellWidget(const QString &text, DiagramItem::DiagramT
 		break;
 	case DiagramItem::Washer:
 		button->setIcon(QIcon(QPixmap("images/Washer.png")));
-		buttonGroup->addButton(button, InsertObject);
+		buttonGroup->addButton(button, 4);
+		OutputDebugString(L"washer\n");
 		break;
 	case DiagramItem::TV:
 		button->setIcon(QIcon(QPixmap("images/CableTV.png")));
-		buttonGroup->addButton(button, InsertObject);
+		buttonGroup->addButton(button, 5);
+		OutputDebugString(L"tv\n");
 		break;
 	case DiagramItem::Desk:
 		button->setIcon(QIcon(QPixmap("images/Desk.png")));
-		buttonGroup->addButton(button, InsertObject);
+		buttonGroup->addButton(button, 6);
+		OutputDebugString(L"desk\n");
 		break;
 	case DiagramItem::Refrig:
 		button->setIcon(QIcon(QPixmap("images/Refrigerator.png")));
-		buttonGroup->addButton(button, InsertObject);
+		buttonGroup->addButton(button, 7);
+		OutputDebugString(L"refrigerator\n");
 		break;
 	}
-
-	//InsertObject
 
 	button->setCheckable(true);
 	button->setIconSize(QSize(50, 50));
