@@ -72,7 +72,7 @@ class DiagramScene : public QGraphicsScene
     Q_OBJECT
 
 public:
-    enum Mode { InsertItem, InsertLine, InsertText, MoveItem };
+    enum Mode { InsertItem, InsertLine, InsertText, MoveItem, InsertObj };
 
     explicit DiagramScene(QMenu *itemMenu, QObject *parent = 0);
     QFont font() const { return myFont; }
@@ -105,6 +105,7 @@ signals:
     void itemInserted(DiagramItem *item);
     void itemInsertedOther(DiagramItem::DiagramType type,QGraphicsItem *item);
     void textInserted(QGraphicsTextItem *item);
+	void objnserted(QGraphicsTextItem *item);
     void itemSelected(QGraphicsItem *item);
 
 protected:

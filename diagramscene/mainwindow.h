@@ -54,6 +54,7 @@
 #include "diagramitem.h"
 
 #include <QMainWindow>
+#include <QDataStream>
 
 class DiagramScene;
 
@@ -87,9 +88,13 @@ private slots:
     void pointerGroupClicked(int id);
     void bringToFront();
     void sendToBack();
+	bool Save();
+	bool SaveAs();
+	void Open();
     void itemInserted(DiagramItem *item);
 	void itemInsertedOther(DiagramItem::DiagramType type, QGraphicsItem *item);
     void textInserted(QGraphicsTextItem *item);
+	void objInserted(QGraphicsTextItem *item);
     void currentFontChanged(const QFont &font);
     void fontSizeChanged(const QString &size);
     void sceneScaleChanged(const QString &scale);
@@ -101,13 +106,18 @@ private slots:
     void lineButtonTriggered();
     void handleFontChange();
     void itemSelected(QGraphicsItem *item);
+	void itemChanged();
     void about();
 
 private:
+	bool saveFile(const QString &fileName);
+	void loadFile(const QString &fileName);
     void createToolBox();
     void createActions();
     void createMenus();
     void createToolbars();
+	void setCurrentFile(const QString &fileName);
+	bool maybeSave();
     QWidget *createBackgroundCellWidget(const QString &text,
                                         const QString &image);
     QWidget *createCellWidget(const QString &text,
@@ -128,6 +138,8 @@ private:
     QAction *toFrontAction;
     QAction *sendBackAction;
     QAction *aboutAction;
+	QAction *saveAction;
+	QAction *saveAsAction;
 
     QMenu *fileMenu;
     QMenu *itemMenu;
@@ -157,6 +169,10 @@ private:
     QAction *textAction;
     QAction *fillAction;
     QAction *lineAction;
+
+	QString curFile; // currnet file name
+	bool itemchanged;
+	QList<DiagramItem*> Item_List;
 };
 //! [0]
 

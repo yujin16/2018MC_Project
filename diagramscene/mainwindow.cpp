@@ -59,6 +59,7 @@
 #include <QtWidgets>
 
 const int InsertTextButton = 10;
+const int InsertObject = 20;
 
 //! [0]
 MainWindow::MainWindow()
@@ -76,8 +77,12 @@ MainWindow::MainWindow()
 		this, SLOT(itemInsertedOther(DiagramItem::DiagramType, QGraphicsItem*)));
     connect(scene, SIGNAL(textInserted(QGraphicsTextItem*)),
             this, SLOT(textInserted(QGraphicsTextItem*)));
+	connect(scene, SIGNAL(objInserted(QGraphicsTextItem*)),
+		this, SLOT(objInserted(QGraphicsTextItem*)));
     connect(scene, SIGNAL(itemSelected(QGraphicsItem*)),
             this, SLOT(itemSelected(QGraphicsItem*)));
+	connect(scene, SIGNAL(valueChanged(QGraphicsItem*)),
+		this, SLOT(itemChanged()));
     createToolbars();
 
     QHBoxLayout *layout = new QHBoxLayout;
@@ -87,6 +92,8 @@ MainWindow::MainWindow()
 
     QWidget *widget = new QWidget;
     widget->setLayout(layout);
+
+	itemchanged = false;
 
     setCentralWidget(widget);
     setWindowTitle(tr("Diagramscene"));
@@ -126,8 +133,11 @@ void MainWindow::buttonGroupClicked(int id)
             button->setChecked(false);
     }
     if (id == InsertTextButton) {
-        scene->setMode(DiagramScene::InsertText);
-    } else {
+		scene->setMode(DiagramScene::InsertText);
+	} else if(id == InsertObject) {
+		scene->setMode(DiagramScene::InsertObj);
+	} 
+	else {
         scene->setItemType(DiagramItem::DiagramType(id));
         scene->setMode(DiagramScene::InsertItem);
     }
@@ -143,6 +153,15 @@ void MainWindow::deleteItem()
             Arrow *arrow = qgraphicsitem_cast<Arrow *>(item);
             arrow->startItem()->removeArrow(arrow);
             arrow->endItem()->removeArrow(arrow);
+
+			//added by #wjw
+			// added by #wjw
+			for (auto it = Item_List.begin(); it != Item_List.end(); it++)
+			{
+				if (*it == item)
+					Item_List.erase(it);
+			}
+
             delete item;
         }
     }
@@ -197,9 +216,113 @@ void MainWindow::sendToBack()
     }
     selectedItem->setZValue(zValue);
 }
-//! [6]
+bool MainWindow::Save()
+{
+	if (curFile.isEmpty()) {
+		return SaveAs();
+	}
+	else {
+		return saveFile(curFile);
+	}
+}
+bool MainWindow::SaveAs()
+{
+	QFileDialog dialog(this); // file 저장 경로 지정 창 띄우기
+	dialog.setWindowModality(Qt::WindowModal);
+	dialog.setAcceptMode(QFileDialog::AcceptSave);
+	if (dialog.exec() != QDialog::Accepted)
+		return false;
+	return saveFile(dialog.selectedFiles().first());
+}
+bool MainWindow::saveFile(const QString &fileName)
+{
+	QFile file(fileName);
+	if (!file.open(QFile::WriteOnly)) {
+		QMessageBox::warning(this, tr("Application"),
+			tr("Cannot write file %1:\n%2.")
+			.arg(QDir::toNativeSeparators(fileName),
+				file.errorString()));
+		return false;
+	}
+	QDataStream out(&file);
+	out.setVersion(QDataStream::Qt_5_10);
+	// QTextStream out(&file);
+	// out << textEdit->toPlainText();
+	// out << scene->items();  // is this doing alright?? #wjw
+	
+	for (int i = 0; i < scene->items().size(); i++)
+		qDebug() << scene->items()[i];
 
-//! [7]
+	setCurrentFile(fileName);
+	file.close();
+
+	statusBar()->showMessage(tr("File saved"), 2000);
+	return true;
+}
+
+void MainWindow::setCurrentFile(const QString &fileName)
+{
+	curFile = fileName;
+	// textEdit->document()->setModified(false);
+	setWindowModified(false);
+
+	QString shownName = curFile;
+	if (curFile.isEmpty())
+		shownName = "untitled.txt";
+	setWindowFilePath(shownName);
+}
+
+void MainWindow::Open()
+{
+	if (maybeSave()) {
+		QString fileName = QFileDialog::getOpenFileName(this);
+		if (!fileName.isEmpty())
+			loadFile(fileName);
+	}
+}
+void MainWindow::loadFile(const QString &fileName)
+{
+	QList<DiagramItem> list;
+	QFile file(fileName);
+	if (!file.open(QFile::ReadOnly)) {
+		QMessageBox::warning(this, tr("Application"),
+			tr("Cannot read file %1:\n%2.")
+			.arg(QDir::toNativeSeparators(fileName), file.errorString()));
+		return;
+	}
+
+	QDataStream in(&file);
+	in.setVersion(QDataStream::Qt_5_10);
+	// textEdit->setPlainText(in.readAll());  // reference #wjw http://www.java2s.com/Code/Cpp/Qt/SavingfilewithQDataStream.htm
+	// in >> list;  // does this work??
+	file.close();
+
+
+	setCurrentFile(fileName);
+	statusBar()->showMessage(tr("File loaded"), 2000);
+}
+
+
+bool MainWindow::maybeSave()
+{
+	if (!itemchanged)
+		return true;
+	const QMessageBox::StandardButton ret
+		= QMessageBox::warning(this, tr("Application"),
+			tr("The document has been modified.\n"
+				"Do you want to save your changes?"),
+			QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+	switch (ret) {
+	case QMessageBox::Save:
+		return Save();
+	case QMessageBox::Cancel:
+		return false;
+	default:
+		break;
+	}
+	return true;
+}
+
 void MainWindow::itemInserted(DiagramItem *item)
 {
     pointerTypeGroup->button(int(DiagramScene::MoveItem))->setChecked(true);
@@ -210,17 +333,18 @@ void MainWindow::itemInserted(DiagramItem *item)
 		if (scene->selectedItems().isEmpty())
 		{
 			item->setSelected(true);
-			// deleteItem();
+			return;
 		}
-			
 		else
 		{
 			item->setPos(scene->selectedItems().first()->x(), scene->selectedItems().first()->y());
 		}
 		
 	}
+	Item_List.append(item);
 }
 
+<<<<<<< HEAD
 void MainWindow::itemInsertedOther(DiagramItem::DiagramType type,
 	QGraphicsItem * item)
 {
@@ -228,7 +352,15 @@ void MainWindow::itemInsertedOther(DiagramItem::DiagramType type,
 	scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
 	buttonGroup->button(int(type))->setChecked(false);
 }
+=======
+>>>>>>> 02077316b38db9f4129ddf29ba5870d02fe0d6bd
 //! [7]
+
+void MainWindow::objInserted(QGraphicsTextItem *)
+{
+	buttonGroup->button(InsertTextButton)->setChecked(false);
+	scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
+}
 
 //! [8]
 void MainWindow::textInserted(QGraphicsTextItem *)
@@ -347,6 +479,10 @@ void MainWindow::itemSelected(QGraphicsItem *item)
     italicAction->setChecked(font.italic());
     underlineAction->setChecked(font.underline());
 }
+void MainWindow::itemChanged()
+{
+	itemchanged = true;
+}
 //! [19]
 
 //! [20]
@@ -373,6 +509,19 @@ void MainWindow::createToolBox()
     layout->addWidget(createCellWidget(tr("Room"), DiagramItem::Step),1, 0);
 	// PBW
     layout->addWidget(createCellWidget(tr("Door"), DiagramItem::Door), 0, 0);
+<<<<<<< HEAD
+=======
+    
+	layout->addWidget(createCellWidget(tr("Washer"), DiagramItem::Washer), 2, 0);
+	layout->addWidget(createCellWidget(tr("TV"), DiagramItem::TV), 2, 1);
+	layout->addWidget(createCellWidget(tr("Desk"), DiagramItem::Desk), 3, 0);
+	layout->addWidget(createCellWidget(tr("Refrigator"), DiagramItem::Refrig), 3, 1);
+	
+	//layout->addWidget(createCellWidget(tr("Refrigator"), DiagramItem::Refrig), 4, 0);
+	//layout->addWidget(createCellWidget(tr("Refrigator"), DiagramItem::Refrig), 4, 1);
+
+	// layout->addWidget(createCellWidget(tr("Input/Output"), DiagramItem::Io), 1, 0);
+>>>>>>> 02077316b38db9f4129ddf29ba5870d02fe0d6bd
 //! [21]
 
 	// itemWidget -> layout -> textWidget -> textLayout -> textButton
@@ -473,6 +622,14 @@ void MainWindow::createActions()
     aboutAction = new QAction(tr("A&bout"), this);
     aboutAction->setShortcut(tr("F1"));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
+
+	saveAction = new QAction(tr("S&ave"), this);
+	aboutAction->setShortcut(tr("Ctrl+S"));
+	connect(saveAction, SIGNAL(triggered()), this, SLOT(Save()));
+
+	saveAsAction = new QAction(tr("S&ave As"), this);
+	aboutAction->setShortcut(tr("Ctrl+Shift+S"));
+	connect(saveAsAction, SIGNAL(triggered()), this, SLOT(SaveAs()));
 }
 
 //! [24]
@@ -482,7 +639,10 @@ void MainWindow::createActions()
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(exitAction);
+	fileMenu->addAction(saveAction);
+	fileMenu->addAction(saveAsAction);
+	fileMenu->addAction(exitAction);
+	
 
     itemMenu = menuBar()->addMenu(tr("&Item"));
     itemMenu->addAction(deleteAction);
@@ -617,24 +777,47 @@ QWidget *MainWindow::createBackgroundCellWidget(const QString &text, const QStri
 //! [29]
 QWidget *MainWindow::createCellWidget(const QString &text, DiagramItem::DiagramType type)
 {
+	DiagramItem item(type, itemMenu);
+	QIcon icon(item.image());
+	QToolButton *button = new QToolButton;
 
-    DiagramItem item(type, itemMenu);
-    QIcon icon(item.image());
 
-    QToolButton *button = new QToolButton;
-    button->setIcon(icon);
-    button->setIconSize(QSize(50, 50));
-    button->setCheckable(true);
-    buttonGroup->addButton(button, int(type));
+	switch (type) {
+	case DiagramItem::Step: case DiagramItem::Door:
+		button->setIcon(icon);
+		buttonGroup->addButton(button, int(type));
+		break;
+	case DiagramItem::Washer:
+		button->setIcon(QIcon(QPixmap("images/Washer.png")));
+		buttonGroup->addButton(button, InsertObject);
+		break;
+	case DiagramItem::TV:
+		button->setIcon(QIcon(QPixmap("images/CableTV.png")));
+		buttonGroup->addButton(button, InsertObject);
+		break;
+	case DiagramItem::Desk:
+		button->setIcon(QIcon(QPixmap("images/Desk.png")));
+		buttonGroup->addButton(button, InsertObject);
+		break;
+	case DiagramItem::Refrig:
+		button->setIcon(QIcon(QPixmap("images/Refrigerator.png")));
+		buttonGroup->addButton(button, InsertObject);
+		break;
+	}
 
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(button, 0, 0, Qt::AlignHCenter);
-    layout->addWidget(new QLabel(text), 1, 0, Qt::AlignCenter);
+	//InsertObject
 
-    QWidget *widget = new QWidget;
-    widget->setLayout(layout);
+	button->setCheckable(true);
+	button->setIconSize(QSize(50, 50));
 
-    return widget;
+	QGridLayout *layout = new QGridLayout;
+	layout->addWidget(button, 0, 0, Qt::AlignHCenter);
+	layout->addWidget(new QLabel(text), 1, 0, Qt::AlignCenter);
+
+	QWidget *widget = new QWidget;
+	widget->setLayout(layout);
+
+	return widget;
 }
 QWidget *MainWindow::createIconWidget(const QString &text, DiagramItem::DiagramType type, const QString &image)
 {
