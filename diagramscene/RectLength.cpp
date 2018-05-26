@@ -17,11 +17,11 @@ void RectLength::paint(QPainter *                       painter,
                        QWidget *                        widget)
 {
 	QRectF rec = boundingRect();
-	QBrush brush(Qt::blue);
 
-	// painter->fillRect(rec, brush);
-	// painter->drawRect(rec);
-	painter->drawText(0, 0, "Hello");
+	// painter->drawText(0, -1*rect->boundingRect().height()/2+10, QString::number(rect->boundingRect().width()));
+	// painter->drawText(rect->boundingRect().width()/2-10, 0, QString::number(rect->boundingRect().height()));
+	painter->drawText(rect->boundingRect(),Qt::AlignHCenter | Qt::AlignTop, QString::number(rect->boundingRect().width()));
+	painter->drawText(rect->boundingRect(), Qt::AlignCenter | Qt::AlignRight, QString::number(rect->boundingRect().height()));
 }
 
 void RectLength::mousePressEvent(QGraphicsSceneMouseEvent * event)
