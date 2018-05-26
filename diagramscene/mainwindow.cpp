@@ -151,7 +151,6 @@ void MainWindow::deleteItem()
             arrow->endItem()->removeArrow(arrow);
 
 			//added by #wjw
-			// added by #wjw
 			for (auto it = Item_List.begin(); it != Item_List.end(); it++)
 			{
 				if (*it == item)
@@ -246,8 +245,12 @@ bool MainWindow::saveFile(const QString &fileName)
 	// out << textEdit->toPlainText();
 	// out << scene->items();  // is this doing alright?? #wjw
 	
-	for (int i = 0; i < scene->items().size(); i++)
-		qDebug() << scene->items()[i];
+	for (int i = 0; i < Item_List.size(); i++)
+	{
+		RectWall* tmp = (*Item_List[i]).GetRectWallB();
+		qDebug() << (int)(*tmp);
+	}
+		
 
 	setCurrentFile(fileName);
 	file.close();
