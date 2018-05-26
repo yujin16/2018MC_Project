@@ -52,8 +52,10 @@
 #include "arrow.h"
 
 #include <QTextCursor>
+#include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <Windows.h>
+#include "RectLength.h"
 
 //! [0]
 DiagramScene::DiagramScene(QMenu *itemMenu, QObject *parent)
@@ -155,6 +157,10 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             item->setBrush(myItemColor);
             addItem(item);
             item->setPos(mouseEvent->scenePos());
+			{
+				RectLength* rl = new RectLength();
+				addItem(rl);
+			}
             emit itemInserted(item);
             break;
 //! [6] //! [7]

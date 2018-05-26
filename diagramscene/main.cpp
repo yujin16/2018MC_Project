@@ -51,6 +51,9 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <QPainter>
+
+MainWindow* g_mainWindow;
 
 int main(int argv, char *args[])
 {
@@ -58,6 +61,7 @@ int main(int argv, char *args[])
 
     QApplication app(argv, args);
     MainWindow mainWindow;
+	g_mainWindow = &mainWindow;
     mainWindow.setGeometry(100, 100, 800, 500);
     mainWindow.show();
 

@@ -53,7 +53,10 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QtGui>
+#include <QtWidgets>
 #include <QMenu>
+#include "Global.h"
 #include <QPainter>
 #include <Windows.h>
 
@@ -92,10 +95,12 @@ DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
                       << QPointF(-120, -80);
             break;
     }
+	// setCursor(Qt::CursorShape::UpArrowCursor);
     setPolygon(myPolygon);
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+
 }
 //! [0]
 
@@ -163,16 +168,21 @@ QVariant DiagramItem::itemChange(GraphicsItemChange change, const QVariant &valu
     return value;
 }
 
+
 void DiagramItem::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
 	OutputDebugString(L"Hello");
+	QGraphicsPolygonItem::mousePressEvent(mouseEvent);
 }
 
 void DiagramItem::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
+	OutputDebugString(L"Move");
+	QGraphicsPolygonItem::mouseMoveEvent(mouseEvent);
 }
 
 void DiagramItem::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
+	QGraphicsPolygonItem::mouseReleaseEvent(mouseEvent);
 }
 //! [6]
