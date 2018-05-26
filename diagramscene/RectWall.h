@@ -24,6 +24,7 @@ public:
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 	void MoveWindows(QPointF pos);
+	QVector<RectWindow*> Get_Windows() { return windows; };
 
 protected:
 	DiagramItem* rect;

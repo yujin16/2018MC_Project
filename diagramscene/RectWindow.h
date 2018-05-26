@@ -15,6 +15,7 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 	void Move(QPointF pos);
 	void SetRatio(QPointF mousePos);
+	QPointF Get_Center() { return center;}
 
 protected:
 	RectWall* rectWall;

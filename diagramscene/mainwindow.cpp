@@ -53,6 +53,8 @@
 #include "diagramscene.h"
 #include "diagramtextitem.h"
 #include "mainwindow.h"
+#include "RectVertex.h"
+#include "RectWall.h"
 #include <QDebug>
 #include "Global.h"
 
@@ -236,26 +238,54 @@ bool MainWindow::SaveAs()
 bool MainWindow::saveFile(const QString &fileName)
 {
 	QFile file(fileName);
-	if (!file.open(QFile::WriteOnly)) {
+	if (!file.open(QFile::WriteOnly | QFile::Text)) {
 		QMessageBox::warning(this, tr("Application"),
 			tr("Cannot write file %1:\n%2.")
 			.arg(QDir::toNativeSeparators(fileName),
 				file.errorString()));
 		return false;
-	}
-	QDataStream out(&file);
-	out.setVersion(QDataStream::Qt_5_10);
+	}	
+	QTextStream out(&file);
+	// out.setVersion(QDataStream::Qt_5_10);
 	// QTextStream out(&file);
 	// out << textEdit->toPlainText();
 	// out << scene->items();  // is this doing alright?? #wjw
 	
+	QVector<RectWindow*> temp_vector;
 	for (int i = 0; i < Item_List.size(); i++)
 	{
-		RectWall* tmp = (*Item_List[i]).GetRectWallB();
-		qDebug() << (int)(*tmp);
+		out << "item#" << i << "\n";
+		for (int j = 0; j < 4; j++)
+			out << Item_List[i]->myPolygon.at(j).x() << "," << Item_List[i]->myPolygon.at(j).y() << "\n";
+
+		out << Item_List[i]->GetRectVertexTl()->x() << "," << Item_List[i]->GetRectVertexTl()->y() << "\n";
+		out << Item_List[i]->GetRectVertexTr()->x() << "," << Item_List[i]->GetRectVertexTr()->y() << "\n";
+		out << Item_List[i]->GetRectVertexBl()->x() << "," << Item_List[i]->GetRectVertexBl()->y() << "\n";
+		out << Item_List[i]->GetRectVertexBr()->x() << "," << Item_List[i]->GetRectVertexBr()->y();
+		out << "\n#IT:";
+		temp_vector = Item_List[i]->GetRectWallT()->Get_Windows();
+		if (!temp_vector.isEmpty()) // if non empty
+			for (auto it = temp_vector.begin(); it != temp_vector.end(); it++)
+				out << (*it)->Get_Center().x() << "," << (*it)->Get_Center().y() << ":";
+		out << "\n#IR:";
+		temp_vector = Item_List[i]->GetRectWallR()->Get_Windows();
+		if (!temp_vector.isEmpty()) // if non empty
+			for (auto it = temp_vector.begin(); it != temp_vector.end(); it++)
+				out << (*it)->Get_Center().x() << "," << (*it)->Get_Center().y() << ":";
+		out << "\n#IB:";
+		temp_vector = Item_List[i]->GetRectWallB()->Get_Windows();
+		if (!temp_vector.isEmpty()) // if non empty
+			for (auto it = temp_vector.begin(); it != temp_vector.end(); it++)
+				out << (*it)->Get_Center().x() << "," << (*it)->Get_Center().y() << ":";
+		out << "\n#IL:";
+		temp_vector = Item_List[i]->GetRectWallL()->Get_Windows();
+		if (!temp_vector.isEmpty()) // if non empty
+			for (auto it = temp_vector.begin(); it != temp_vector.end(); it++)
+				out << (*it)->Get_Center().x() << "," << (*it)->Get_Center().y() << ":";
+		out << "\n##";
+
 	}
 		
-
 	setCurrentFile(fileName);
 	file.close();
 
@@ -294,10 +324,21 @@ void MainWindow::loadFile(const QString &fileName)
 		return;
 	}
 
-	QDataStream in(&file);
-	in.setVersion(QDataStream::Qt_5_10);
+	QTextStream in(&file);
+	// in.setVersion(QDataStream::Qt_5_10);
 	// textEdit->setPlainText(in.readAll());  // reference #wjw http://www.java2s.com/Code/Cpp/Qt/SavingfilewithQDataStream.htm
 	// in >> list;  // does this work??
+	QString line;
+	while (true)
+	{
+		in >> line;
+		if (line == "##")
+			break;
+		for (int i = 0; i < 4; i++)
+		{
+			;
+		}
+	}
 	file.close();
 
 
