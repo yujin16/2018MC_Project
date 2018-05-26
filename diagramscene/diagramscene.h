@@ -92,7 +92,7 @@ public slots:
 signals:
     void itemInserted(DiagramItem *item);
     void textInserted(QGraphicsTextItem *item);
-	void objnserted(QGraphicsTextItem *item);
+	void objInserted(DiagramItem *item);
     void itemSelected(QGraphicsItem *item);
 
 protected:

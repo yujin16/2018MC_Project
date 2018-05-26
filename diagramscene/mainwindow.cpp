@@ -72,8 +72,8 @@ MainWindow::MainWindow()
             this, SLOT(itemInserted(DiagramItem*)));
     connect(scene, SIGNAL(textInserted(QGraphicsTextItem*)),
             this, SLOT(textInserted(QGraphicsTextItem*)));
-	connect(scene, SIGNAL(objInserted(QGraphicsTextItem*)),
-		this, SLOT(objInserted(QGraphicsTextItem*)));
+	connect(scene, SIGNAL(objInserted(DiagramItem*)),
+		this, SLOT(objInserted(DiagramItem*)));
     connect(scene, SIGNAL(itemSelected(QGraphicsItem*)),
             this, SLOT(itemSelected(QGraphicsItem*)));
     createToolbars();
@@ -269,10 +269,33 @@ void MainWindow::itemInserted(DiagramItem *item)
 }
 //! [7]
 
-void MainWindow::objInserted(DiagramItem *)
+void MainWindow::objInserted(DiagramItem *item)
 {
-	buttonGroup->button(InsertTextButton)->setChecked(false);
-	scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
+	buttonGroup->button(4)->setChecked(false);
+	buttonGroup->button(5)->setChecked(false);
+	buttonGroup->button(6)->setChecked(false);
+	buttonGroup->button(7)->setChecked(false);
+	scene->setMode(DiagramScene::Mode(3));
+
+	char buff[100];
+	sprintf(buff, "\ntype : %d\n", pointerTypeGroup->checkedId());
+	OutputDebugStringA(buff);
+
+
+	buttonGroup->button(int(item->diagramType()))->setChecked(false);
+	if (item->diagramType() == DiagramItem::DiagramType(1)) // 1 is door
+	{
+		if (scene->selectedItems().isEmpty())
+		{
+			item->setSelected(true);
+			// deleteItem();
+		}
+		else
+		{
+			item->setPos(scene->selectedItems().first()->x(), scene->selectedItems().first()->y());
+		}
+
+	}
 }
 
 //! [8]

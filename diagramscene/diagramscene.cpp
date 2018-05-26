@@ -250,6 +250,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 				//item->SetRectLength(obj);
 				addItem(obj);
 			}
+			emit objInserted(item);
 
 			/*QImage image("images/Washer.png");
 
