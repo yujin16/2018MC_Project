@@ -177,7 +177,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             item->setBrush(myItemColor);
             addItem(item);
             item->setPos(mouseEvent->scenePos());
-			if (myItemType == DiagramItem::DiagramType::Step) // if door
+			if (myItemType == DiagramItem::DiagramType::Step) 
 			{
 				RectLength* rl = new RectLength(item);
 				rl->setPos(mouseEvent->scenePos());

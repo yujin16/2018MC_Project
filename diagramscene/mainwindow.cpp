@@ -63,6 +63,7 @@
 const int InsertTextButton = 10;
 const int InsertObject = 20;
 
+
 //! [0]
 MainWindow::MainWindow()
 {
@@ -255,9 +256,12 @@ bool MainWindow::saveFile(const QString &fileName)
 	for (int i = 0; i < Item_List.size(); i++)
 	{
 		out << "item#" << i << "\n";
+		out << Item_List[i]->diagramType() << "\n";
 		for (int j = 0; j < 4; j++)
 			out << Item_List[i]->myPolygon.at(j).x() << "," << Item_List[i]->myPolygon.at(j).y() << "\n";
 
+		if (Item_List[i]->diagramType() != 0)
+			continue;
 		out << Item_List[i]->GetRectVertexTl()->x() << "," << Item_List[i]->GetRectVertexTl()->y() << "\n";
 		out << Item_List[i]->GetRectVertexTr()->x() << "," << Item_List[i]->GetRectVertexTr()->y() << "\n";
 		out << Item_List[i]->GetRectVertexBl()->x() << "," << Item_List[i]->GetRectVertexBl()->y() << "\n";
@@ -283,7 +287,6 @@ bool MainWindow::saveFile(const QString &fileName)
 			for (auto it = temp_vector.begin(); it != temp_vector.end(); it++)
 				out << (*it)->Get_Center().x() << "," << (*it)->Get_Center().y() << ":";
 		out << "\n##";
-
 	}
 		
 	setCurrentFile(fileName);
@@ -329,14 +332,22 @@ void MainWindow::loadFile(const QString &fileName)
 	// textEdit->setPlainText(in.readAll());  // reference #wjw http://www.java2s.com/Code/Cpp/Qt/SavingfilewithQDataStream.htm
 	// in >> list;  // does this work??
 	QString line;
+	DiagramItem *item_;
+	QStringList substrs;
 	while (true)
 	{
 		in >> line;
 		if (line == "##")
 			break;
+		in >> line;
+		item_ = new DiagramItem(DiagramItem::DiagramType(line.toInt()), itemMenu);
+		scene->addItem(item_);
 		for (int i = 0; i < 4; i++)
 		{
-			;
+			in >> line;
+			substrs = line.split(",");
+			
+			
 		}
 	}
 	file.close();
