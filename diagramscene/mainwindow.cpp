@@ -74,6 +74,8 @@ MainWindow::MainWindow()
             this, SLOT(textInserted(QGraphicsTextItem*)));
     connect(scene, SIGNAL(itemSelected(QGraphicsItem*)),
             this, SLOT(itemSelected(QGraphicsItem*)));
+	connect(scene, SIGNAL(valueChanged(QGraphicsItem*)),
+		this, SLOT(itemChanged()));
     createToolbars();
 
     QHBoxLayout *layout = new QHBoxLayout;
@@ -83,6 +85,8 @@ MainWindow::MainWindow()
 
     QWidget *widget = new QWidget;
     widget->setLayout(layout);
+
+	itemchanged = false;
 
     setCentralWidget(widget);
     setWindowTitle(tr("Diagramscene"));
@@ -214,16 +218,21 @@ bool MainWindow::SaveAs()
 bool MainWindow::saveFile(const QString &fileName)
 {
 	QFile file(fileName);
-	if (!file.open(QFile::WriteOnly | QFile::Text)) {
+	if (!file.open(QFile::WriteOnly)) {
 		QMessageBox::warning(this, tr("Application"),
 			tr("Cannot write file %1:\n%2.")
 			.arg(QDir::toNativeSeparators(fileName),
 				file.errorString()));
 		return false;
 	}
-	QTextStream out(&file);
-
+	QDataStream out(&file);
+	out.setVersion(QDataStream::Qt_5_10);
+	// QTextStream out(&file);
+	// out << textEdit->toPlainText();
+	out << scene->items();  // is this doing alright?? #wjw
 	setCurrentFile(fileName);
+	file.close();
+
 	statusBar()->showMessage(tr("File saved"), 2000);
 	return true;
 }
@@ -239,9 +248,57 @@ void MainWindow::setCurrentFile(const QString &fileName)
 		shownName = "untitled.txt";
 	setWindowFilePath(shownName);
 }
-//! [6]
 
-//! [7]
+void MainWindow::Open()
+{
+	if (maybeSave()) {
+		QString fileName = QFileDialog::getOpenFileName(this);
+		if (!fileName.isEmpty())
+			loadFile(fileName);
+	}
+}
+void MainWindow::loadFile(const QString &fileName)
+{
+	QList<DiagramItem> list;
+	QFile file(fileName);
+	if (!file.open(QFile::ReadOnly)) {
+		QMessageBox::warning(this, tr("Application"),
+			tr("Cannot read file %1:\n%2.")
+			.arg(QDir::toNativeSeparators(fileName), file.errorString()));
+		return;
+	}
+
+	QDataStream in(&file);
+	in.setVersion(QDataStream::Qt_5_10);
+	// textEdit->setPlainText(in.readAll());  // reference #wjw http://www.java2s.com/Code/Cpp/Qt/SavingfilewithQDataStream.htm
+	// in >> list;  // does this work??
+	file.close();
+
+
+	setCurrentFile(fileName);
+	statusBar()->showMessage(tr("File loaded"), 2000);
+}
+
+bool MainWindow::maybeSave()
+{
+	if (!itemchanged)
+		return true;
+	const QMessageBox::StandardButton ret
+		= QMessageBox::warning(this, tr("Application"),
+			tr("The document has been modified.\n"
+				"Do you want to save your changes?"),
+			QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+	switch (ret) {
+	case QMessageBox::Save:
+		return Save();
+	case QMessageBox::Cancel:
+		return false;
+	default:
+		break;
+	}
+	return true;
+}
+
 void MainWindow::itemInserted(DiagramItem *item)
 {
     pointerTypeGroup->button(int(DiagramScene::MoveItem))->setChecked(true);
@@ -379,6 +436,10 @@ void MainWindow::itemSelected(QGraphicsItem *item)
     boldAction->setChecked(font.weight() == QFont::Bold);
     italicAction->setChecked(font.italic());
     underlineAction->setChecked(font.underline());
+}
+void MainWindow::itemChanged(QGraphicsItem *item)
+{
+	itemchanged = true;
 }
 //! [19]
 
