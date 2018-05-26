@@ -149,6 +149,15 @@ void MainWindow::deleteItem()
             Arrow *arrow = qgraphicsitem_cast<Arrow *>(item);
             arrow->startItem()->removeArrow(arrow);
             arrow->endItem()->removeArrow(arrow);
+
+			//added by #wjw
+			// added by #wjw
+			for (auto it = Item_List.begin(); it != Item_List.end(); it++)
+			{
+				if (*it == item)
+					Item_List.erase(it);
+			}
+
             delete item;
         }
     }
@@ -235,7 +244,11 @@ bool MainWindow::saveFile(const QString &fileName)
 	out.setVersion(QDataStream::Qt_5_10);
 	// QTextStream out(&file);
 	// out << textEdit->toPlainText();
-	out << scene->items();  // is this doing alright?? #wjw
+	// out << scene->items();  // is this doing alright?? #wjw
+	
+	for (int i = 0; i < scene->items().size(); i++)
+		qDebug() << scene->items()[i];
+
 	setCurrentFile(fileName);
 	file.close();
 
@@ -316,7 +329,7 @@ void MainWindow::itemInserted(DiagramItem *item)
 		if (scene->selectedItems().isEmpty())
 		{
 			item->setSelected(true);
-			// deleteItem();
+			return;
 		}
 		else
 		{
@@ -324,7 +337,9 @@ void MainWindow::itemInserted(DiagramItem *item)
 		}
 		
 	}
+	Item_List.append(item);
 }
+
 //! [7]
 
 void MainWindow::objInserted(QGraphicsTextItem *)

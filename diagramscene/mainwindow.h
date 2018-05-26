@@ -169,6 +169,7 @@ private:
 
 	QString curFile; // currnet file name
 	bool itemchanged;
+	QList<DiagramItem*> Item_List;
 };
 //! [0]
 
