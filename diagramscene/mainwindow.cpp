@@ -466,7 +466,13 @@ void MainWindow::createToolBox()
     layout->addWidget(createCellWidget(tr("Room"), DiagramItem::Step),0, 1);
 	// PBW
     layout->addWidget(createCellWidget(tr("Door"), DiagramItem::Door), 0, 0);
-    // layout->addWidget(createCellWidget(tr("Input/Output"), DiagramItem::Io), 1, 0);
+    
+	layout->addWidget(createCellWidget(tr("Washer"), DiagramItem::Washer), 2, 0);
+	layout->addWidget(createCellWidget(tr("TV"), DiagramItem::TV), 2, 1);
+	layout->addWidget(createCellWidget(tr("Desk"), DiagramItem::Desk), 3, 0);
+	layout->addWidget(createCellWidget(tr("Refrigator"), DiagramItem::Refrig), 3, 1);
+
+	// layout->addWidget(createCellWidget(tr("Input/Output"), DiagramItem::Io), 1, 0);
 //! [21]
 
 	// itemWidget -> layout -> textWidget -> textLayout -> textButton
@@ -722,24 +728,41 @@ QWidget *MainWindow::createBackgroundCellWidget(const QString &text, const QStri
 //! [29]
 QWidget *MainWindow::createCellWidget(const QString &text, DiagramItem::DiagramType type)
 {
+	DiagramItem item(type, itemMenu);
+	QIcon icon(item.image());
+	QToolButton *button = new QToolButton;
 
-    DiagramItem item(type, itemMenu);
-    QIcon icon(item.image());
 
-    QToolButton *button = new QToolButton;
-    button->setIcon(icon);
-    button->setIconSize(QSize(50, 50));
-    button->setCheckable(true);
-    buttonGroup->addButton(button, int(type));
+	switch (type) {
+	case DiagramItem::Step: case DiagramItem::Door:
+		button->setIcon(icon);
+		break;
+	case DiagramItem::Washer:
+		button->setIcon(QIcon(QPixmap("images/Washer.png")));
+		break;
+	case DiagramItem::TV:
+		button->setIcon(QIcon(QPixmap("images/CableTV.png")));
+		break;
+	case DiagramItem::Desk:
+		button->setIcon(QIcon(QPixmap("images/Desk.png")));
+		break;
+	case DiagramItem::Refrig:
+		button->setIcon(QIcon(QPixmap("images/Refrigerator.png")));
+		break;
+	}
 
-    QGridLayout *layout = new QGridLayout;
-    layout->addWidget(button, 0, 0, Qt::AlignHCenter);
-    layout->addWidget(new QLabel(text), 1, 0, Qt::AlignCenter);
+	button->setCheckable(true);
+	button->setIconSize(QSize(50, 50));
+	buttonGroup->addButton(button, int(type));
 
-    QWidget *widget = new QWidget;
-    widget->setLayout(layout);
+	QGridLayout *layout = new QGridLayout;
+	layout->addWidget(button, 0, 0, Qt::AlignHCenter);
+	layout->addWidget(new QLabel(text), 1, 0, Qt::AlignCenter);
 
-    return widget;
+	QWidget *widget = new QWidget;
+	widget->setLayout(layout);
+
+	return widget;
 }
 //! [29]
 
