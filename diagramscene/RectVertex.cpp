@@ -31,23 +31,23 @@ QRectF RectVertex::boundingRect() const
 	switch (type)
 	{
 	case TOP_LEFT:
-		return QRectF(rect->myPolygon.at(0).x() + 2.5,
-		              rect->myPolygon.at(0).y() + 2.5,
+		return QRectF(rect->myPolygon.at(0).x() - 2.5,
+		              rect->myPolygon.at(0).y() - 2.5,
 		              5,
 		              5);
 	case TOP_RIGHT:
-		return QRectF(rect->myPolygon.at(1).x() + 2.5,
-		              rect->myPolygon.at(1).y() + 2.5,
+		return QRectF(rect->myPolygon.at(1).x() - 2.5,
+		              rect->myPolygon.at(1).y() - 2.5,
 		              5,
 		              5);
 	case BOTTOM_RIGHT:
-		return QRectF(rect->myPolygon.at(2).x() + 2.5,
-		              rect->myPolygon.at(2).y() + 2.5,
+		return QRectF(rect->myPolygon.at(2).x() - 2.5,
+		              rect->myPolygon.at(2).y() - 2.5,
 		              5,
 		              5);
 	case BOTTOM_LEFT:
-		return QRectF(rect->myPolygon.at(3).x() + 2.5,
-		              rect->myPolygon.at(3).y() + 2.5,
+		return QRectF(rect->myPolygon.at(3).x() - 2.5,
+		              rect->myPolygon.at(3).y() - 2.5,
 		              5,
 		              5);
 	}

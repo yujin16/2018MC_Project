@@ -71,6 +71,7 @@ QT_END_NAMESPACE
 class Arrow;
 class RectLength;
 class RectVertex;
+class RectWall;
 
 //! [0]
 class DiagramItem : public QGraphicsPolygonItem
@@ -140,6 +141,46 @@ public:
 		rectVertexBR = rectVertexBr;
 	}
 
+
+	RectWall * GetRectWallT() const
+	{
+		return rectWallT;
+	}
+
+	void SetRectWallT(RectWall * rectWallT)
+	{
+		this->rectWallT = rectWallT;
+	}
+
+	RectWall * GetRectWallR() const
+	{
+		return rectWallR;
+	}
+
+	void SetRectWallR(RectWall * rectWallR)
+	{
+		this->rectWallR = rectWallR;
+	}
+
+	RectWall * GetRectWallB() const
+	{
+		return rectWallB;
+	}
+
+	void SetRectWallB(RectWall * rectWallB)
+	{
+		this->rectWallB = rectWallB;
+	}
+
+	RectWall * GetRectWallL() const
+	{
+		return rectWallL;
+	}
+
+	void SetRectWallL(RectWall * rectWallL)
+	{
+		this->rectWallL = rectWallL;
+	}
 	//PBW open private to public
     QPolygonF myPolygon;
 
@@ -159,12 +200,18 @@ private:
     QList<Arrow *> arrows;
 
 	RectLength* rectLength;
+
 	RectVertex* rectVertexTL;
 	RectVertex* rectVertexTR;
 	RectVertex* rectVertexBL;
 	RectVertex* rectVertexBR;
 
+	RectWall* rectWallT;
+	RectWall* rectWallR;
+	RectWall* rectWallB;
+	RectWall* rectWallL;
 };
 //! [0]
 
 #endif // DIAGRAMITEM_H
+

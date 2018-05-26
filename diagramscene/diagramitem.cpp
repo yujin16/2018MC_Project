@@ -61,6 +61,7 @@
 #include <Windows.h>
 #include "RectLength.h"
 #include "RectVertex.h"
+#include "RectWall.h"
 
 //! [0]
 DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
@@ -188,6 +189,10 @@ void DiagramItem::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
 	rectVertexTR->setPos(this->pos());
 	rectVertexBL->setPos(this->pos());
 	rectVertexBR->setPos(this->pos());
+	rectWallT->setPos(this->pos());
+	rectWallR->setPos(this->pos());
+	rectWallB->setPos(this->pos());
+	rectWallL->setPos(this->pos());
 	QGraphicsPolygonItem::mouseMoveEvent(mouseEvent);
 }
 
