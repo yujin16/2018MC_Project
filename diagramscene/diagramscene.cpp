@@ -158,7 +158,8 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             addItem(item);
             item->setPos(mouseEvent->scenePos());
 			{
-				RectLength* rl = new RectLength();
+				RectLength* rl = new RectLength(item);
+				rl->setPos(mouseEvent->scenePos());
 				addItem(rl);
 			}
             emit itemInserted(item);
