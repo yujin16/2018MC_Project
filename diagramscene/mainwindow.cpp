@@ -328,6 +328,9 @@ void MainWindow::about()
 //! [20]
 
 //! [21]
+/*
+ * Add Sidebar
+ */
 void MainWindow::createToolBox()
 {
     buttonGroup = new QButtonGroup(this);
@@ -335,11 +338,13 @@ void MainWindow::createToolBox()
     connect(buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(buttonGroupClicked(int)));
     QGridLayout *layout = new QGridLayout;
-    layout->addWidget(createCellWidget(tr("Conditional"), DiagramItem::Conditional), 0, 0);
-    layout->addWidget(createCellWidget(tr("Process"), DiagramItem::Step),0, 1);
-    layout->addWidget(createCellWidget(tr("Input/Output"), DiagramItem::Io), 1, 0);
+    layout->addWidget(createCellWidget(tr("Room"), DiagramItem::Step),0, 1);
+	// PBW
+    // layout->addWidget(createCellWidget(tr("Conditional"), DiagramItem::Conditional), 0, 0);
+    // layout->addWidget(createCellWidget(tr("Input/Output"), DiagramItem::Io), 1, 0);
 //! [21]
 
+	// itemWidget -> layout -> textWidget -> textLayout -> textButton
     QToolButton *textButton = new QToolButton;
     textButton->setCheckable(true);
     buttonGroup->addButton(textButton, InsertTextButton);
@@ -358,6 +363,7 @@ void MainWindow::createToolBox()
     QWidget *itemWidget = new QWidget;
     itemWidget->setLayout(layout);
 
+	// backgroundWidget -> bglayout
     backgroundButtonGroup = new QButtonGroup(this);
     connect(backgroundButtonGroup, SIGNAL(buttonClicked(QAbstractButton*)),
             this, SLOT(backgroundButtonGroupClicked(QAbstractButton*)));
@@ -389,6 +395,9 @@ void MainWindow::createToolBox()
 //! [22]
 
 //! [23]
+/*
+ * Add Edit Actions
+ */
 void MainWindow::createActions()
 {
     toFrontAction = new QAction(QIcon(":/images/bringtofront.png"),
@@ -436,6 +445,9 @@ void MainWindow::createActions()
 }
 
 //! [24]
+/*
+ * Add File, Item Help Options
+ */
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
@@ -453,6 +465,9 @@ void MainWindow::createMenus()
 //! [24]
 
 //! [25]
+/*
+ * Font Edit top Actions(ex Font, Scale)
+ */
 void MainWindow::createToolbars()
 {
 //! [25]
@@ -519,13 +534,16 @@ void MainWindow::createToolbars()
     pointerButton->setCheckable(true);
     pointerButton->setChecked(true);
     pointerButton->setIcon(QIcon(":/images/pointer.png"));
-    QToolButton *linePointerButton = new QToolButton;
-    linePointerButton->setCheckable(true);
-    linePointerButton->setIcon(QIcon(":/images/linepointer.png"));
 
+	// PBW
+    // QToolButton *linePointerButton = new QToolButton;
+    // linePointerButton->setCheckable(true);
+    // linePointerButton->setIcon(QIcon(":/images/linepointer.png"));
+
+	// PBW
     pointerTypeGroup = new QButtonGroup(this);
     pointerTypeGroup->addButton(pointerButton, int(DiagramScene::MoveItem));
-    pointerTypeGroup->addButton(linePointerButton, int(DiagramScene::InsertLine));
+    // pointerTypeGroup->addButton(linePointerButton, int(DiagramScene::InsertLine));
     connect(pointerTypeGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(pointerGroupClicked(int)));
 
@@ -539,7 +557,6 @@ void MainWindow::createToolbars()
 
     pointerToolbar = addToolBar(tr("Pointer type"));
     pointerToolbar->addWidget(pointerButton);
-    pointerToolbar->addWidget(linePointerButton);
     pointerToolbar->addWidget(sceneScaleCombo);
 //! [27]
 }
