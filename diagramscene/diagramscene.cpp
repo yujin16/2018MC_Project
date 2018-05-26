@@ -58,6 +58,7 @@
 #include "RectLength.h"
 #include "RectVertex.h"
 #include "RectWall.h"
+#include "ObjectItem.h"
 
 //! [0]
 DiagramScene::DiagramScene(QMenu *itemMenu, QObject *parent)
@@ -153,6 +154,7 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         return;
 
     DiagramItem *item;
+	ObjectItem *obj;
     switch (myMode) {
         case InsertItem:
 			// #wjw
@@ -229,6 +231,18 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             textItem->setDefaultTextColor(myTextColor);
             textItem->setPos(mouseEvent->scenePos());
             emit textInserted(textItem);
+			break;
+		case InsertObj:
+			obj = new ObjectItem();
+			obj->setImage("images/Washer.png");
+
+			//emit objInserted(obj);
+
+			//label->setPixmap(buffer);
+			//label->show();
+			//라벨 생성해서 이미지 띄우기
+
+
 			break;
 		case MoveItem:
 			OutputDebugString(L"Move Item");

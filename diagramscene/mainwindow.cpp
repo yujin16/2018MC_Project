@@ -58,6 +58,7 @@
 #include <QtWidgets>
 
 const int InsertTextButton = 10;
+const int InsertObject = 20;
 
 //! [0]
 MainWindow::MainWindow()
@@ -72,6 +73,8 @@ MainWindow::MainWindow()
             this, SLOT(itemInserted(DiagramItem*)));
     connect(scene, SIGNAL(textInserted(QGraphicsTextItem*)),
             this, SLOT(textInserted(QGraphicsTextItem*)));
+	connect(scene, SIGNAL(objInserted(QGraphicsTextItem*)),
+		this, SLOT(objInserted(QGraphicsTextItem*)));
     connect(scene, SIGNAL(itemSelected(QGraphicsItem*)),
             this, SLOT(itemSelected(QGraphicsItem*)));
 	connect(scene, SIGNAL(valueChanged(QGraphicsItem*)),
@@ -126,8 +129,11 @@ void MainWindow::buttonGroupClicked(int id)
             button->setChecked(false);
     }
     if (id == InsertTextButton) {
-        scene->setMode(DiagramScene::InsertText);
-    } else {
+		scene->setMode(DiagramScene::InsertText);
+	} else if(id == InsertObject) {
+		scene->setMode(DiagramScene::InsertObj);
+	} 
+	else {
         scene->setItemType(DiagramItem::DiagramType(id));
         scene->setMode(DiagramScene::InsertItem);
     }
@@ -321,6 +327,12 @@ void MainWindow::itemInserted(DiagramItem *item)
 }
 //! [7]
 
+void MainWindow::objInserted(QGraphicsTextItem *)
+{
+	buttonGroup->button(InsertTextButton)->setChecked(false);
+	scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
+}
+
 //! [8]
 void MainWindow::textInserted(QGraphicsTextItem *)
 {
@@ -472,6 +484,9 @@ void MainWindow::createToolBox()
 	layout->addWidget(createCellWidget(tr("TV"), DiagramItem::TV), 2, 1);
 	layout->addWidget(createCellWidget(tr("Desk"), DiagramItem::Desk), 3, 0);
 	layout->addWidget(createCellWidget(tr("Refrigator"), DiagramItem::Refrig), 3, 1);
+	
+	//layout->addWidget(createCellWidget(tr("Refrigator"), DiagramItem::Refrig), 4, 0);
+	//layout->addWidget(createCellWidget(tr("Refrigator"), DiagramItem::Refrig), 4, 1);
 
 	// layout->addWidget(createCellWidget(tr("Input/Output"), DiagramItem::Io), 1, 0);
 //! [21]
@@ -737,24 +752,30 @@ QWidget *MainWindow::createCellWidget(const QString &text, DiagramItem::DiagramT
 	switch (type) {
 	case DiagramItem::Step: case DiagramItem::Door:
 		button->setIcon(icon);
+		buttonGroup->addButton(button, int(type));
 		break;
 	case DiagramItem::Washer:
 		button->setIcon(QIcon(QPixmap("images/Washer.png")));
+		buttonGroup->addButton(button, InsertObject);
 		break;
 	case DiagramItem::TV:
 		button->setIcon(QIcon(QPixmap("images/CableTV.png")));
+		buttonGroup->addButton(button, InsertObject);
 		break;
 	case DiagramItem::Desk:
 		button->setIcon(QIcon(QPixmap("images/Desk.png")));
+		buttonGroup->addButton(button, InsertObject);
 		break;
 	case DiagramItem::Refrig:
 		button->setIcon(QIcon(QPixmap("images/Refrigerator.png")));
+		buttonGroup->addButton(button, InsertObject);
 		break;
 	}
 
+	//InsertObject
+
 	button->setCheckable(true);
 	button->setIconSize(QSize(50, 50));
-	buttonGroup->addButton(button, int(type));
 
 	QGridLayout *layout = new QGridLayout;
 	layout->addWidget(button, 0, 0, Qt::AlignHCenter);
