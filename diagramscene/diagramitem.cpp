@@ -79,10 +79,10 @@ DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
             path.lineTo(200, 25);
             myPolygon = path.toFillPolygon();
             break;
-        case Conditional:
-            myPolygon << QPointF(-100, 0) << QPointF(0, 100)
-                      << QPointF(100, 0) << QPointF(0, -100)
-                      << QPointF(-100, 0);
+        case Door:
+            myPolygon << QPointF(-10, 0) << QPointF(0, 10)
+                      << QPointF(10, 0) << QPointF(0, -10)
+                      << QPointF(-10, 0);
             break;
         case Step:
             myPolygon << QPointF(-100, -100) << QPointF(100, -100)

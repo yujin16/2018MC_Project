@@ -345,7 +345,7 @@ void MainWindow::createToolBox()
     QGridLayout *layout = new QGridLayout;
     layout->addWidget(createCellWidget(tr("Room"), DiagramItem::Step),0, 1);
 	// PBW
-    // layout->addWidget(createCellWidget(tr("Conditional"), DiagramItem::Conditional), 0, 0);
+    layout->addWidget(createCellWidget(tr("Door"), DiagramItem::Door), 0, 0);
     // layout->addWidget(createCellWidget(tr("Input/Output"), DiagramItem::Io), 1, 0);
 //! [21]
 
