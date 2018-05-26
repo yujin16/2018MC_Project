@@ -56,6 +56,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <Windows.h>
 #include "RectLength.h"
+#include "RectVertex.h"
 
 //! [0]
 DiagramScene::DiagramScene(QMenu *itemMenu, QObject *parent)
@@ -158,11 +159,27 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             addItem(item);
             item->setPos(mouseEvent->scenePos());
 			{
-				// RectLength* rl = new RectLength(item);
 				RectLength* rl = new RectLength(item);
 				rl->setPos(mouseEvent->scenePos());
 				item->SetRectLength(rl);
 				addItem(rl);
+
+				RectVertex* rv = new RectVertex(item,RectVertex::TOP_LEFT);
+				rv->setPos(mouseEvent->scenePos());
+				item->SetRectVertexTl(rv);
+				addItem(rv);
+				RectVertex* rv2 = new RectVertex(item,RectVertex::TOP_RIGHT);
+				rv2->setPos(mouseEvent->scenePos());
+				item->SetRectVertexTr(rv2);
+				addItem(rv2);
+				RectVertex* rv3 = new RectVertex(item,RectVertex::BOTTOM_LEFT);
+				rv3->setPos(mouseEvent->scenePos());
+				item->SetRectVertexBl(rv3);
+				addItem(rv3);
+				RectVertex* rv4 = new RectVertex(item,RectVertex::BOTTOM_RIGHT);
+				rv4->setPos(mouseEvent->scenePos());
+				item->SetRectVertexBr(rv4);
+				addItem(rv4);
 			}
             emit itemInserted(item);
             break;

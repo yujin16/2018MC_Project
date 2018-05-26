@@ -60,6 +60,7 @@
 #include <QPainter>
 #include <Windows.h>
 #include "RectLength.h"
+#include "RectVertex.h"
 
 //! [0]
 DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
@@ -101,6 +102,9 @@ DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+
+	// myPolygon.replace(1, QPointF(200, -100));
+ //    setPolygon(myPolygon);
 
 }
 //! [0]
@@ -180,6 +184,10 @@ void DiagramItem::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
 	OutputDebugString(L"Move");
 	rectLength->setPos(this->pos());
+	rectVertexTL->setPos(this->pos());
+	rectVertexTR->setPos(this->pos());
+	rectVertexBL->setPos(this->pos());
+	rectVertexBR->setPos(this->pos());
 	QGraphicsPolygonItem::mouseMoveEvent(mouseEvent);
 }
 

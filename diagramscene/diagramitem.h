@@ -70,6 +70,7 @@ QT_END_NAMESPACE
 
 class Arrow;
 class RectLength;
+class RectVertex;
 
 //! [0]
 class DiagramItem : public QGraphicsPolygonItem
@@ -99,6 +100,46 @@ public:
 		this->rectLength = rectLength;
 	}
 
+	RectVertex * GetRectVertexTl() const
+	{
+		return rectVertexTL;
+	}
+
+	void SetRectVertexTl(RectVertex * rectVertexTl)
+	{
+		rectVertexTL = rectVertexTl;
+	}
+
+	RectVertex * GetRectVertexTr() const
+	{
+		return rectVertexTR;
+	}
+
+	void SetRectVertexTr(RectVertex * rectVertexTr)
+	{
+		rectVertexTR = rectVertexTr;
+	}
+
+	RectVertex * GetRectVertexBl() const
+	{
+		return rectVertexBL;
+	}
+
+	void SetRectVertexBl(RectVertex * rectVertexBl)
+	{
+		rectVertexBL = rectVertexBl;
+	}
+
+	RectVertex * GetRectVertexBr() const
+	{
+		return rectVertexBR;
+	}
+
+	void SetRectVertexBr(RectVertex * rectVertexBr)
+	{
+		rectVertexBR = rectVertexBr;
+	}
+
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
@@ -116,6 +157,10 @@ private:
     QList<Arrow *> arrows;
 
 	RectLength* rectLength;
+	RectVertex* rectVertexTL;
+	RectVertex* rectVertexTR;
+	RectVertex* rectVertexBL;
+	RectVertex* rectVertexBR;
 
 };
 //! [0]
