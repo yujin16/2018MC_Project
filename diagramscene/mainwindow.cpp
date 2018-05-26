@@ -201,6 +201,16 @@ void MainWindow::itemInserted(DiagramItem *item)
     pointerTypeGroup->button(int(DiagramScene::MoveItem))->setChecked(true);
     scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
     buttonGroup->button(int(item->diagramType()))->setChecked(false);
+	if (item->diagramType() == DiagramItem::DiagramType(1)) // 1 is door
+	{
+		if (scene->selectedItems().isEmpty())
+			item->setSelected(true);
+		else
+		{
+			item->setPos(scene->selectedItems().first()->x(), scene->selectedItems().first()->y());
+		}
+		
+	}
 }
 //! [7]
 
