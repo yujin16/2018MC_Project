@@ -529,7 +529,7 @@ void MainWindow::createToolBox()
     textLayout->addWidget(new QLabel(tr("Text")), 1, 1, Qt::AlignCenter);
     QWidget *textWidget = new QWidget;
     textWidget->setLayout(textLayout);
-    layout->addWidget(textWidget, 4, 0);
+    layout->addWidget(textWidget, 1, 1);
 
     layout->setRowStretch(3, 10);
     layout->setColumnStretch(2, 10);
