@@ -160,12 +160,13 @@ void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     switch (myMode) {
         case InsertItem:
 			// #wjw
-			if (myItemType == DiagramItem::DiagramType(1)) // if door
-				if (this->selectedItems().isEmpty()) {
-					break;
-				}
 			// #wjw
 			//PBW
+			if (myItemType == DiagramItem::DiagramType::Door) 
+			{
+				// RectWall will handle this
+				break;
+			}
 			// if Window 
 			if (myItemType == DiagramItem::DiagramType::Window)
 			{

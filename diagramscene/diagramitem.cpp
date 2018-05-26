@@ -163,6 +163,23 @@ QPixmap DiagramItem::image() const
 
     return pixmap;
 }
+
+void DiagramItem::UpdateAll()
+{
+	rectLength->update();
+	rectVertexTL->update();
+	rectVertexTR->update();
+	rectVertexBL->update();
+	rectVertexBR->update();
+	rectWallT->update();
+	rectWallR->update();
+	rectWallB->update();
+	rectWallL->update();
+	rectWallT->UpdateAll();
+	rectWallR->UpdateAll();
+	rectWallB->UpdateAll();
+	rectWallL->UpdateAll();
+}
 //! [4]
 
 //! [5]
@@ -205,10 +222,10 @@ void DiagramItem::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
 	rectWallR->setPos(this->pos());
 	rectWallB->setPos(this->pos());
 	rectWallL->setPos(this->pos());
-	rectWallT->MoveWindows(this->pos());
-	rectWallR->MoveWindows(this->pos());
-	rectWallB->MoveWindows(this->pos());
-	rectWallL->MoveWindows(this->pos());
+	rectWallT->MoveWindows_Doors(this->pos());
+	rectWallR->MoveWindows_Doors(this->pos());
+	rectWallB->MoveWindows_Doors(this->pos());
+	rectWallL->MoveWindows_Doors(this->pos());
 	QGraphicsPolygonItem::mouseMoveEvent(mouseEvent);
 }
 

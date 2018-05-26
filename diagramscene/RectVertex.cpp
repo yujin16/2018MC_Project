@@ -31,25 +31,25 @@ QRectF RectVertex::boundingRect() const
 	switch (type)
 	{
 	case TOP_LEFT:
-		return QRectF(rect->myPolygon.at(0).x() - 2.5,
-		              rect->myPolygon.at(0).y() - 2.5,
-		              5,
-		              5);
+		return QRectF(rect->myPolygon.at(0).x() - vertexExpand,
+		              rect->myPolygon.at(0).y() - vertexExpand,
+		              vertexExpand*2,
+		              vertexExpand*2);
 	case TOP_RIGHT:
-		return QRectF(rect->myPolygon.at(1).x() - 2.5,
-		              rect->myPolygon.at(1).y() - 2.5,
-		              5,
-		              5);
+		return QRectF(rect->myPolygon.at(1).x() - vertexExpand,
+		              rect->myPolygon.at(1).y() - vertexExpand,
+		              vertexExpand*2,
+		              vertexExpand*2);
 	case BOTTOM_RIGHT:
-		return QRectF(rect->myPolygon.at(2).x() - 2.5,
-		              rect->myPolygon.at(2).y() - 2.5,
-		              5,
-		              5);
+		return QRectF(rect->myPolygon.at(2).x() - vertexExpand,
+		              rect->myPolygon.at(2).y() - vertexExpand,
+		              vertexExpand*2,
+		              vertexExpand*2);
 	case BOTTOM_LEFT:
-		return QRectF(rect->myPolygon.at(3).x() - 2.5,
-		              rect->myPolygon.at(3).y() - 2.5,
-		              5,
-		              5);
+		return QRectF(rect->myPolygon.at(3).x() - vertexExpand,
+		              rect->myPolygon.at(3).y() - vertexExpand,
+		              vertexExpand*2,
+		              vertexExpand*2);
 	}
 }
 
@@ -59,12 +59,14 @@ void RectVertex::paint(QPainter *                       painter,
                        QWidget *                        widget)
 {
 	QRectF rec = boundingRect();
-	// painter->eraseRect(rec);
 
 	QPen   pointpen(Qt::red);
+	pointpen.setWidth(2);
 
 	painter->setPen(pointpen);
-	painter->drawRect(rec);
+	// painter->drawRect(rec);
+	painter->drawPoint(rec.center());
+
 }
 
 void RectVertex::mousePressEvent(QGraphicsSceneMouseEvent * event)
@@ -94,6 +96,7 @@ void RectVertex::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 		break;
 	}
 	rect->setPolygon(rect->myPolygon);
+	// rect->UpdateAll();
 	// QGraphicsItem::mouseMoveEvent(event);
 }
 

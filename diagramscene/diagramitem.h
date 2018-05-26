@@ -91,6 +91,7 @@ public:
     QPixmap image() const;
     int type() const override { return Type;}
 
+	void UpdateAll();
 
 	RectLength * GetRectLength() const
 	{

@@ -5,11 +5,11 @@
 #include <QPainter>
 #include "diagramitem.h"
 
-class RectWindow :public QGraphicsItem
+class RectDoor :public QGraphicsItem
 {
 public:
 
-	RectWindow(RectWall * rectWall, const QPointF & center);
+	RectDoor(RectWall * rectWall, const QPointF & center);
 
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -21,7 +21,9 @@ protected:
 	QPointF center;
 	qreal ratio;
 	qreal winLen = 30;
+	int expand = 20;
 	int wallExpand;
+	int sumExpand;
 	void mousePressEvent(QGraphicsSceneMouseEvent *event);
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
