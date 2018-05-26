@@ -104,7 +104,7 @@ private slots:
     void lineButtonTriggered();
     void handleFontChange();
     void itemSelected(QGraphicsItem *item);
-	void itemChanged(QGraphicsItem *item);
+	void itemChanged();
     void about();
 
 private:

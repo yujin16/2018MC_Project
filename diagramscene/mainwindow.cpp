@@ -279,6 +279,7 @@ void MainWindow::loadFile(const QString &fileName)
 	statusBar()->showMessage(tr("File loaded"), 2000);
 }
 
+
 bool MainWindow::maybeSave()
 {
 	if (!itemchanged)
@@ -437,7 +438,7 @@ void MainWindow::itemSelected(QGraphicsItem *item)
     italicAction->setChecked(font.italic());
     underlineAction->setChecked(font.underline());
 }
-void MainWindow::itemChanged(QGraphicsItem *item)
+void MainWindow::itemChanged()
 {
 	itemchanged = true;
 }
